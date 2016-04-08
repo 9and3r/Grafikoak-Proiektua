@@ -7,11 +7,12 @@ function loadLevel(){
 	agua.rotation.x = -0.5 * Math.PI;
 	agua.position.y = -10;
 	scene.add(agua);
+	solidObjects.push(agua);
 	//var audio = new Audio('uncharted.mp3');
 	//audio.loop = true;
 	//audio.play();
 
-	var light = new THREE.AmbientLight( 0x5F5F5F ); // soft white light
+	var light = new THREE.AmbientLight( 0xFAFAFA ); // soft white light
 	scene.add( light );
 
 
@@ -29,17 +30,29 @@ function loadLevel(){
 	personaje = getModel('nathan');
 	scene.add(personaje);
 
+	var geometry = new THREE.CylinderGeometry( 10, 10, 50, 32 );
+	var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+	personajeColision = new THREE.Mesh( geometry, material );
+	personajeColision.applyMatrix(new THREE.Matrix4().makeTranslation(0,25,0));
+	personaje.add(personajeColision);
+
 	wall = getObject('wall');
 	wall.position.x = 100;
 	scene.add(wall);
+	solidObjects.push(wall);
 
 	wall = getObject('wall');
 	wall.position.z = -100;
 	wall.position.x = -100;
 	scene.add(wall);
+	solidObjects.push(wall);
 
 	wall = getObject('wall');
 	wall.position.z = 250;
 	wall.rotation.y = Math.PI/2;
 	scene.add(wall);
+	solidObjects.push(wall);
+
+	song = getSound('pyramid');
+	//song.play();
 }

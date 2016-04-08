@@ -13,6 +13,14 @@ var modelNames = {'nathan':0}
 var models = [];
 var loadedModels = 0;
 
+// Musica
+var soundsPath = ['music/pyramid.mp3'];
+var soundNames = {'pyramid':0};
+var sounds = [];
+var loadedSounds = 0;
+
+
+
 var baseObjects = {};
 
 function getModel(name){
@@ -21,6 +29,10 @@ function getModel(name){
 
 function getObject(name){
 	return new THREE.Mesh(baseObjects[name].geometry, baseObjects[name].material, 0);
+}
+
+function getSound(name){
+	return sounds[soundNames[name]];
 }
 
 function loadAll(){
@@ -32,11 +44,14 @@ function loadAll(){
 	for(i=0; i<modelsPaths.length; i++){
 		loadModel(modelsPaths[i], i);
 	}
+	for(i=0; i<soundsPath.length; i++){
+		loadSound(soundsPath[i], i);
+	}
 }
 
 function checkLoaded(){
 	//console.log(loadedTextures)
-	if (loadedTextures == texturesPaths.length && loadedModels == modelsPaths.length){
+	if (loadedTextures == texturesPaths.length && loadedModels == modelsPaths.length && loadedSounds == soundsPath.length){
 		createBaseObjects();
 		// Todo esta cargado. Empezar el juego!
 		onGameLoaded();
@@ -54,24 +69,33 @@ function onModelLoaded(i, object){
 }
 
 function loadTexture(src, i){
-	console.log("Textura kargatzen")
 	textureLoader.load(src, onTextureLoaded.bind(undefined, i));
 }
 
 function onTextureLoaded(i, texture){
-	console.log("On texture loaded")
-	console.log(i)
-	console.log(texture)
 	textures[i] = texture;
 	loadedTextures++;
 	checkLoaded();
 }
 
+function loadSound(src, i){
+	sounds[i] = new Audio(src);
+	sounds[i].load();
+	sounds[i].oncanplaythrough = onSoundLoaded;
+	
+}
+
+function onSoundLoaded(){
+	console.log("Song loaded");
+	loadedSounds++;
+	checkLoaded();
+}
+
 function createBaseObjects(){
 	var texture = textures[0];
-	console.log(texture)
 	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 	texture.repeat.set( 10, 10 );
+
 	var planeGeometry = new THREE.BoxGeometry(200, 850, 1);
 	var planeMaterial = new THREE.MeshLambertMaterial({map:texture});
 
@@ -80,3 +104,4 @@ function createBaseObjects(){
 	plane.receiveShadow = true;
 	baseObjects['wall'] = plane;
 }
+
