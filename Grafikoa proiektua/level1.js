@@ -12,7 +12,7 @@ function loadLevel(){
 	//audio.loop = true;
 	//audio.play();
 
-	var light = new THREE.AmbientLight( 0x0A0A0A ); // soft white light
+	var light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
 	scene.add( light );
 
 
@@ -34,7 +34,7 @@ function loadLevel(){
 	var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 	personajeColision = new THREE.Mesh( geometry, material );
 	personajeColision.applyMatrix(new THREE.Matrix4().makeTranslation(0,25,0));
-	personaje.add(personajeColision);
+	//personaje.add(personajeColision);
 
 	wall = getObject('wall');
 	wall.position.x = 100;

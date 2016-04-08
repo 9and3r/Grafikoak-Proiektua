@@ -5,6 +5,7 @@ var personajePosCentro;
 var pressedKeys = [false, false, false, false];
 var angle = 0;
 var targetAngle = 0;
+var cameraHideObjects = [];
 
 var suelo = false;
 var verticalSpeed = 0;
@@ -31,6 +32,25 @@ function moveCamaraAndPersonaje(){
 					}else{
 						targetAngle = 0;
 					}
+					/*
+					raycaster.set(camera.position, camera.rotation);
+					raycaster.near = 0;
+					raycaster.far = camera.position.distanceTo(personajePosCentro);
+					objects = raycaster.intersectObjects(solidObjects);
+
+					for (var i=0; i< cameraHideObjects.length; i++){
+						var current = cameraHideObjects[i];
+						current['object'].material.transparent = current['transparent'];
+						current['object'].material.opacity = current['opacity'];
+					}
+					
+					for (i=0; i< objects.length; i++){
+						var currentObject = objects[i].object;
+						cameraHideObjects.push({'object': currentObject, 'transparent': currentObject.material.transparent, 'opacity': currentObject.material.alpha});
+						currentObject.material.transparent = true;
+						currentObject.material.opacity = 0.15;
+					}
+					*/
 					
 
 				}

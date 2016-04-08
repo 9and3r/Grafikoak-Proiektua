@@ -8,7 +8,7 @@ var loadedTextures = 0;
 
 
 // Modelos
-var modelsPaths = ['Drake/drake'];
+var modelsPaths = ['Drake/drake.json'];
 var modelNames = {'nathan':0}
 var models = [];
 var loadedModels = 0;
@@ -36,8 +36,7 @@ function getSound(name){
 }
 
 function loadAll(){
-	modelLoader = new THREE.OBJMTLLoader();
-	modelLoader.crossOrigin = 'anonymous';
+	modelLoader = new THREE.JSONLoader();
 	textureLoader = new THREE.TextureLoader();
 	for (i=0; i<texturesPaths.length; i++){
 		loadTexture(texturesPaths[i], i);
@@ -60,11 +59,11 @@ function checkLoaded(){
 }
 
 function loadModel(src, i){
-	modelLoader.load(src+'.obj', src+'.mtl', onModelLoaded.bind(null, i));
+	modelLoader.load(src, onModelLoaded.bind(null, i));
 }
 
-function onModelLoaded(i, object){
-	models[i] = object;
+function onModelLoaded(i, geometry, materials){
+	models[i] = new THREE.Mesh( geometry, new THREE.MultiMaterial( materials ) );;
 	loadedModels++;
 	checkLoaded();
 }
@@ -99,7 +98,7 @@ function createBaseObjects(){
 
 	var planeGeometry = new THREE.BoxGeometry(200, 850, 1);
 	var planeMaterial = new THREE.MeshPhongMaterial({map:texture});
-	planeMaterial.normalMap = textures[1];
+	//planeMaterial.normalMap = textures[1];
 
 
 	var plane = new THREE.Mesh(new THREE.BoxGeometry(10, 250, 500), planeMaterial, 0);
