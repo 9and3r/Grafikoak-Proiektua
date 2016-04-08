@@ -6,7 +6,9 @@ var pressedKeys = [false, false, false, false];
 var angle = 0;
 var targetAngle = 0;
 
+var suelo = false;
 var verticalSpeed = 0;
+var verticalAceleration = 0;
 
 
 function moveCamaraAndPersonaje(){
@@ -38,6 +40,10 @@ function moveCamaraAndPersonaje(){
 				var i = getPressedKeyPos(e.keyCode);
 				if (i != -1){
 					pressedKeys[i] = true;
+				}else if(e.keyCode == 32){
+					if(suelo){
+						verticalSpeed = 5;
+					}
 				}
 			}
 
@@ -91,25 +97,24 @@ function moveCamaraAndPersonaje(){
 					}
 				}
 				//personaje.position = personajeColision.position;
-				if (calculateVerticalSpeed()){
-					if (!tryMovePersonaje(new THREE.Vector3(0, -1, 0), verticalSpeed)){
-						verticalSpeed = 0;
-					}
+				calculateVerticalSpeed();
+				if (verticalSpeed != 0){
+					tryMovePersonaje(new THREE.Vector3(0, 1, 0), verticalSpeed);
+				}
+
+				if (!tryMovePersonaje(new THREE.Vector3(0, -1, 0), 1)){
+					suelo = true;
+				}else{
+					suelo = false;
 				}
 				rotarPersonaje(keyCount, rotation);
 			}
 
 			function calculateVerticalSpeed(){
 				if (verticalSpeed > 0){
-					verticalSpeed -= 0.01;
-					if (verticalSpeed <= 0){
-						verticalSpeed = 0;
-						return false;
-					}else{
-						return true;
-					}
+					verticalSpeed -= 0.3;
 				}else{
-					return true;
+					verticalSpeed = 0;
 				}
 			}
 
@@ -117,15 +122,16 @@ function moveCamaraAndPersonaje(){
 				worldDirection = direction.clone();
 				worldDirection.applyAxisAngle( new THREE.Vector3(0, 1, 0), angle );
 				raycaster.set(personaje.position, worldDirection);
+				raycaster.near = 0;
 				raycaster.far = distance;
 				objects = raycaster.intersectObjects(solidObjects);
 				if (objects.length == 0) {
 					personaje.translateX(direction.x * distance);
 					personaje.translateY(direction.y * distance);
 					personaje.translateZ(direction.z * distance);
-					return false;
-				}else{
 					return true;
+				}else{
+					return false;
 				}
 			}
 

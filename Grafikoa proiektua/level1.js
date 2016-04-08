@@ -12,7 +12,7 @@ function loadLevel(){
 	//audio.loop = true;
 	//audio.play();
 
-	var light = new THREE.AmbientLight( 0xFAFAFA ); // soft white light
+	var light = new THREE.AmbientLight( 0x0A0A0A ); // soft white light
 	scene.add( light );
 
 
@@ -22,10 +22,10 @@ function loadLevel(){
 	//scene.add(light);
 
 	// Creamos una luz de tipo spot
-	//spotLight = new THREE.PointLight( 0xffffff, 1, 200 );
-	//spotLight.position.set(0, 15, 0);
-	// Incluimos la luz a la escena
-	//scene.add(spotLight);
+	spotLight = new THREE.PointLight( 0xffffff, 1, 200 );
+	spotLight.position.set(0, 15, 0);
+	//Incluimos la luz a la escena
+	scene.add(spotLight);
 
 	personaje = getModel('nathan');
 	scene.add(personaje);

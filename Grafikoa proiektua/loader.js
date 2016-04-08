@@ -2,7 +2,7 @@ var modelLoader;
 var textureLoader;
 
 // Texturas
-var texturesPaths = ['wall.jpg'];
+var texturesPaths = ['wall.jpg', 'images/wall/wall_NRM.png'];
 var textures = [];
 var loadedTextures = 0;
 
@@ -37,6 +37,7 @@ function getSound(name){
 
 function loadAll(){
 	modelLoader = new THREE.OBJMTLLoader();
+	modelLoader.crossOrigin = 'anonymous';
 	textureLoader = new THREE.TextureLoader();
 	for (i=0; i<texturesPaths.length; i++){
 		loadTexture(texturesPaths[i], i);
@@ -97,7 +98,8 @@ function createBaseObjects(){
 	texture.repeat.set( 10, 10 );
 
 	var planeGeometry = new THREE.BoxGeometry(200, 850, 1);
-	var planeMaterial = new THREE.MeshLambertMaterial({map:texture});
+	var planeMaterial = new THREE.MeshPhongMaterial({map:texture});
+	planeMaterial.normalMap = textures[1];
 
 
 	var plane = new THREE.Mesh(new THREE.BoxGeometry(10, 250, 500), planeMaterial, 0);
