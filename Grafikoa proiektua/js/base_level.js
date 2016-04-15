@@ -26,12 +26,12 @@ BaseLevel.prototype.render = function(renderer, camera){
 	if(this.avatarControll){
 		this.avatarControll.moveCameraAndAvatar(this.playing, camera);
 		if (this.avatarControll.avatar.position.y < -100 && this.playing){
-			this.die();
+			this.die(true);
 		}
 	}
 	for (var i = 0; i < this.movingObjects.length; i++){
 		if (this.movingObjects[i].move(this.avatarControll)){
-			this.die();
+			this.die(false);
 			break;
 		}
 	}
@@ -54,18 +54,21 @@ BaseLevel.prototype.onKeyUp = function(e){
 	}
 }
 
-BaseLevel.prototype.die = function(){
+BaseLevel.prototype.die = function(showDie){
 	if (this.playing){
 		this.playing = false;
 		getSound('die').play();
-		window.setTimeout(this.showDie.bind(this), 4000);
-		
+		if (showDie){
+			this.showDie();
+		}else{
+			window.setTimeout(this.init.bind(this), 8000);
+		}
 	}
 }
 
 BaseLevel.prototype.showDie = function(){
 	document.getElementById('game-over').style.display = 'block'
-	window.setTimeout(this.init.bind(this), 4000);
+	window.setTimeout(this.init.bind(this), 8000);
 }
 
 BaseLevel.prototype.addSolidObject = function(object){

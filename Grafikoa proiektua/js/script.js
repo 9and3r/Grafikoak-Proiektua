@@ -62,11 +62,11 @@
 				// render utilizando requestAnimationFrame
 				//moveCamaraAndPersonaje();
 				onRenderLoader();
-				requestAnimationFrame(render);
-
 				if (currentLevel.ready){
 					currentLevel.render(renderer, camera)
 				}
+
+				requestAnimationFrame(render);
 			}
 
 

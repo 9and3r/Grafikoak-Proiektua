@@ -111,5 +111,13 @@ function createBaseObjects(){
 	plane.rotation.z = 0.5 * Math.PI;
 	plane.receiveShadow = true;
 	baseObjects['floor'] = plane;
+
+	var plane = new THREE.Mesh(new THREE.BoxGeometry(80, 250, 80), planeMaterial, 0);
+	plane.receiveShadow = true;
+	baseObjects['platform-h'] = plane;
+
+	var plane = new THREE.Mesh(new THREE.BoxGeometry(250, 250, 40), planeMaterial, 0);
+	plane.receiveShadow = true;
+	baseObjects['platform-v'] = plane;
 }
 

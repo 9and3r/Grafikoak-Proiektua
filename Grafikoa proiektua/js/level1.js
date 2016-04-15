@@ -36,7 +36,7 @@ Level1.prototype.onInit = function(){
 	//Incluimos la luz a la escena
 	this.scene.add(spotLight);
 
-	var plat = new MobilePlatform(getObject('floor'), 10, 50, 0, 0.4, 1000);
+	var plat = new MobilePlatform(getObject('floor'), 10, 50, 0, 0.3, 1000);
 	this.addMovingObject(plat);
 	plat.object.position.y = -120;
 	plat.object.position.z = 0;
@@ -44,12 +44,9 @@ Level1.prototype.onInit = function(){
 	plat.object.scale.x = 0.3;
 
 
-	var plat = new MobilePlatform(getObject('floor'), -10, 100, 1, 0.4, 1000);
+	var plat = new MobilePlatform(getObject('platform-v'), 100, 100, 1, 2, 1000);
 	this.addMovingObject(plat);
 	plat.object.position.z = 100;
-	plat.object.scale.z = 0.3;
-	plat.object.scale.x = 0.3;
-	plat.object.scale.y = 0.01
 
 	
 

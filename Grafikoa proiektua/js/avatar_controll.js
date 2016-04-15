@@ -13,10 +13,12 @@ AvatarControll = function(avatar){
 	this.boundingBox = new THREE.BoundingBoxHelper(avatar);
 	this.boundingBox.update();
 
+
 }
 
 AvatarControll.speed = 2;
-AvatarControll.gravity = 0.7;
+AvatarControll.gravity = 0.4;
+AvatarControll.minGravity = -1;
 AvatarControll.cameraY = 60;
 AvatarControll.cameraZ = -100;
 AvatarControll.camaraRotationSpeed = 0.03;
@@ -83,7 +85,7 @@ AvatarControll.prototype.moveAvatar = function(canmove){
 			keyCount ++;
 		}
 	}
-	this.moveVertical(keyCount, rotation);
+	this.moveVertical(keyCount, rotation, canmove);
 	if (canmove){
 		this.moveHorizontal(keyCount, rotation);
 		this.rotateAvatar(keyCount, rotation);
@@ -91,9 +93,6 @@ AvatarControll.prototype.moveAvatar = function(canmove){
 		this.avatar.rotation.y = rotation;
 	}
 	
-
-	
-
 	// Si es necesario cambiar el giro de la camara para el siguiente frame
 	if (this.targetAngle != this.angle){
 		this.changeRotation();
@@ -122,70 +121,95 @@ AvatarControll.prototype.moveHorizontal = function(keyCount, rotation){
 
 
 
-AvatarControll.prototype.moveVertical = function(keyCount, rotation){
+AvatarControll.prototype.moveVertical = function(keyCount, rotation, canmove){
 	// Calcular la nueva velocidad vertical
 	this.calculateVerticalSpeed();
 
 	// Mover el personaje con el valor de verticalSpeed
-	if (this.verticalSpeed != 0){
-		this.floor = this.tryMoveAvatar(new THREE.Vector3(0, 1, 0), this.verticalSpeed);
-	}else{
+	if (this.verticalSpeed > 0 && canmove){
+		this.tryMoveAvatar(new THREE.Vector3(0, 1, 0), this.verticalSpeed);
+		this.floor = null;
+	}else if(this.verticalSpeed < 0){
 		// Intentar mover el personaje hacia abajo y comprobar si esta en el suelo
-		this.floor = this.tryMoveAvatar(new THREE.Vector3(0, -1, 0), 1);
+		this.floor = this.tryMoveAvatar(new THREE.Vector3(0, -1, 0), this.verticalSpeed * -1);
+		if (this.floor){
+			this.verticalSpeed = 0;
+		}
 	}
 	
 }
 
 AvatarControll.prototype.calculateVerticalSpeed = function(){
-	if (this.verticalSpeed > 0){
-		this.verticalSpeed -= AvatarControll.gravity;
-	}else{
-		this.verticalSpeed = 0;
+	this.verticalSpeed -= AvatarControll.gravity;
+	if (this.verticalSpeed < 0 && this.verticalSpeed > AvatarControll.minGravity){
+		this.verticalSpeed = AvatarControll.minGravity;
 	}
 }
 
-AvatarControll.prototype.getCheckPositions = function(){
+AvatarControll.prototype.getCheckPositions = function(direction){
 	var positions = [];
-	for (var i=0; i<3; i++){
-		var y;
-		switch(i){
-			case 0:
-				y = 0;
-				break;
-			case 1:
-				y = this.boundingBox.box.max.y / 2;
-				break;
-			case 2:
-				y = this.boundingBox.box.max.y;
+
+	
+
+	var rotation = this.avatar.rotation.y;
+	this.avatar.rotation.y = 0;
+
+	this.boundingBox.update();
+	var max = this.boundingBox.box.max.sub(this.avatar.position);
+	var min = this.boundingBox.box.min.sub(this.avatar.position);
+	var distance;
+	if (max.x - min.x > max.z - min.z){
+		distance = max.z - min.z;
+	}else{
+		distance = max.x - min.x;
+	}
+
+	this.avatar.rotation.y = rotation;
+
+	if (direction.y < 0){
+		AvatarControll.getCheckPosition(0, this.avatar.position, distance, direction, positions);
+	}else if (direction.y > 0){
+		AvatarControll.getCheckPosition(max.y - min.y, this.avatar.position, distance, direction, positions);
+	}else{
+		for (var i=0; i<35; i++){
+			var y = (max.y-min.y) / 34 * i;
+			AvatarControll.getCheckPosition(y, this.avatar.position, distance, direction, positions);
 		}
+	}		
+	return positions;
+}
 
+AvatarControll.getCheckPosition = function(y, position, distance, direction, positions){
+	if (direction.y != 0){
 		// Posicion central
-		currentPos = this.avatar.position.clone();
+		currentPos = position.clone();
 		currentPos.y += y;
-		positions.push(currentPos);
-
-		// 4 extremos
-		currentPos = this.avatar.position.clone();
-		currentPos.y += y;
-		currentPos.x += this.boundingBox.box.max.x;
-		positions.push(currentPos);
-
-		currentPos = this.avatar.position.clone();
-		currentPos.y += y;
-		currentPos.x += this.boundingBox.box.min.x;
-		positions.push(currentPos);
-
-		currentPos = this.avatar.position.clone();
-		currentPos.y += y;
-		currentPos.z += this.boundingBox.box.max.z;
-		positions.push(currentPos);
-
-		currentPos = this.avatar.position.clone();
-		currentPos.y += y;
-		currentPos.z += this.boundingBox.box.min.z;
 		positions.push(currentPos);
 	}
-	return positions;
+	if (direction.y != 0 || direction.x > 0){
+		currentPos = position.clone();
+		currentPos.y += y;
+		currentPos.x += distance;
+		positions.push(currentPos);
+	}
+	if (direction.y != 0 || direction.x < 0){
+		currentPos = position.clone();
+		currentPos.y += y;
+		currentPos.x -= distance;
+		positions.push(currentPos);
+	}
+	if (direction.y != 0 || direction.z > 0){
+		currentPos = position.clone();
+		currentPos.y += y;
+		currentPos.z += distance;
+		positions.push(currentPos);
+	}
+	if (direction.y != 0 || direction.z < 0){
+		currentPos = position.clone();
+		currentPos.y += y;
+		currentPos.z -= distance;
+		positions.push(currentPos);
+	}
 }
 
 AvatarControll.prototype.checkIfCanMove = function(direction, distance, checkAngle){
@@ -196,7 +220,7 @@ AvatarControll.prototype.checkIfCanMove = function(direction, distance, checkAng
 		worldDirection = direction;
 	}
 	var colision = null;
-	var positions = this.getCheckPositions();
+	var positions = this.getCheckPositions(direction);
 	var i = 0;
 	while (!colision && i < positions.length){
 		this.raycaster.set(positions[i], worldDirection);
