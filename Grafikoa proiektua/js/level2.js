@@ -1,13 +1,14 @@
-function Level1(){
+function Level2(){
 	BaseLevel.call(this, 1, 'Level 1');
 }
 
-Level1.prototype = Object.create(BaseLevel.prototype);
-Level1.prototype.constructor = Level1;
+Level2.prototype = Object.create(BaseLevel.prototype);
+Level2.prototype.constructor = Level2;
 
-Level1.prototype.onInit = function(){
+Level2.prototype.onInit = function(){
 
 	this.avatarControll = new AvatarControll(getModel('nathan'));
+	this.avatarControll.avatar.position.y = 150;
 	this.scene.add(this.avatarControll.avatar);
 
 	//var waterGeometry = new THREE.BoxGeometry( 200, 500, 1);
@@ -24,6 +25,9 @@ Level1.prototype.onInit = function(){
 	var light = new THREE.AmbientLight( 0x0A0A0A ); // soft white light
 	this.scene.add( light );
 
+	var spawn = new Spawn(this, this.scene);
+	this.addRenderObject(spawn);
+
 
 	//light = new THREE.PointLight( 0xff0000, 1, 100 );
 	//light.position.set(0, 10, 0);
@@ -39,7 +43,7 @@ Level1.prototype.onInit = function(){
 	var plat = new MobilePlatform(getObject('floor'), 10, 50, 0, 0.3, 1000);
 	this.addMovingObject(plat);
 	plat.object.position.y = -120;
-	plat.object.position.z = 0;
+	plat.object.position.z = 200;
 	plat.object.scale.z = 0.3;
 	plat.object.scale.x = 0.3;
 
@@ -67,11 +71,7 @@ Level1.prototype.onInit = function(){
 	this.scene.add(wall);
 	this.avatarControll.solidObjects.push(wall);
 
-	wall = getObject('wall');
-	wall.position.z = 250;
-	wall.rotation.y = Math.PI/2;
-	this.scene.add(wall);
-	this.avatarControll.solidObjects.push(wall);
+
 
 	wall = getObject('floor');
 	wall.position.y = -130;
@@ -86,6 +86,10 @@ Level1.prototype.onInit = function(){
 	
 	this.scene.add(wall);
 	this.avatarControll.solidObjects.push(wall);
+
+	var sky = getObject('sky');
+	sky.position.z = 1000;
+	this.scene.add(sky)
 
 	song = getSound('pyramid');
 	//song.play();

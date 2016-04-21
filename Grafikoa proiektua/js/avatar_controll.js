@@ -12,8 +12,13 @@ AvatarControll = function(avatar){
 
 	this.boundingBox = new THREE.BoundingBoxHelper(avatar);
 	this.boundingBox.update();
+	this.hidden = [];
 
+	this.avatar.scale.x = 0;
+	this.avatar.scale.y = 0;
+	this.avatar.scale.z = 1;
 
+	this.targetScale = new THREE.Vector3(1, 1, 1);
 }
 
 AvatarControll.speed = 2;
@@ -22,7 +27,7 @@ AvatarControll.minGravity = -1;
 AvatarControll.cameraY = 60;
 AvatarControll.cameraZ = -100;
 AvatarControll.camaraRotationSpeed = 0.03;
-AvatarControll.height = 
+AvatarControll.scaleSpeed = 0.03;
 
 AvatarControll.prototype.moveCameraAndAvatar = function(canmove, camera){
 	this.moveAvatar(canmove);
@@ -36,7 +41,18 @@ AvatarControll.prototype.moveCameraAndAvatar = function(canmove, camera){
 	this.avatarCenterPos.y = this.avatar.position.y + 30;
 	this.avatarCenterPos.z = this.avatar.position.z;
 	camera.lookAt(this.avatarCenterPos);
-	//this.changeRotation();
+	this.calculateScale();
+}
+
+AvatarControll.prototype.calculateScale = function(){
+	for(var i=0; i<3; i++){
+		var scale = this.avatar.scale.getComponent(i);
+		if (scale - this.targetScale.getComponent(i) > AvatarControll.scaleSpeed){
+			this.avatar.scale.setComponent(i, scale - AvatarControll.scaleSpeed);
+		}else if (this.targetScale.getComponent(i) - scale > AvatarControll.scaleSpeed){
+			this.avatar.scale.setComponent(i, scale + AvatarControll.scaleSpeed);
+		}
+	}
 }
 
 AvatarControll.getPressedKeyPos = function(keyCode){
@@ -134,9 +150,32 @@ AvatarControll.prototype.moveVertical = function(keyCount, rotation, canmove){
 		this.floor = this.tryMoveAvatar(new THREE.Vector3(0, -1, 0), this.verticalSpeed * -1);
 		if (this.floor){
 			this.verticalSpeed = 0;
+			if (this.floor.object.object && this.floor.object.object instanceof Spawn){
+				this.floor.object.onFloor();
+			}
 		}
 	}
-	
+}
+
+AvatarControll.prototype.render = function(level, camera){
+	/*
+	// http://stackoverflow.com/a/31819161
+	for (var i=0; i<this.hidden.length; i++){
+   		this.hidden[i].material.opacity = 1;
+   	}
+	var vector = new THREE.Vector3();
+	vector.set(0, 0, 1);
+	vector.unproject(camera);
+   	this.raycaster.set(camera.position, vector.sub(camera.position).normalize());
+   	this.raycaster.near = 0;
+   	this.raycaster.far = camera.position.distanceTo(this.avatarCenterPos) - 30;
+   	var intersects = this.raycaster.intersectObjects(this.solidObjects);
+   	for (i=0; i<intersects.length; i++){
+   		this.hidden.push(intersects[i].object);
+   		intersects[i].object.material.opacity = 0.5;
+   		intersects[i].object.material.trasparent = true;
+   	}
+   	*/
 }
 
 AvatarControll.prototype.calculateVerticalSpeed = function(){
@@ -166,15 +205,21 @@ AvatarControll.prototype.getCheckPositions = function(direction){
 
 	this.avatar.rotation.y = rotation;
 
+	var start;
+	var finish;
 	if (direction.y < 0){
-		AvatarControll.getCheckPosition(0, this.avatar.position, distance, direction, positions);
+		start = 0;
+		finish = 15;
 	}else if (direction.y > 0){
-		AvatarControll.getCheckPosition(max.y - min.y, this.avatar.position, distance, direction, positions);
+		start = 30;
+		finish = 35;
 	}else{
-		for (var i=0; i<35; i++){
-			var y = (max.y-min.y) / 34 * i;
-			AvatarControll.getCheckPosition(y, this.avatar.position, distance, direction, positions);
-		}
+		start = 0;
+		finish = 35;
+	}
+	for (var i=start; i<finish; i++){
+		var y = (max.y-min.y) / 34 * i;
+		AvatarControll.getCheckPosition(y, this.avatar.position, distance, direction, positions);
 	}		
 	return positions;
 }

@@ -2,14 +2,14 @@ var modelLoader;
 var textureLoader;
 
 // Texturas
-var texturesPaths = ['images/rock/rock_COLOR.png', 'images/rock/rock_NRM.png', 'images/rock/rock_OCC.png'];
+var texturesPaths = ['images/rock/rock_COLOR.png', 'images/rock/rock_NRM.png', 'images/rock/rock_OCC.png', 'images/sky.jpg'];
 var textures = [];
 var loadedTextures = 0;
 
 
 // Modelos
-var modelsPaths = ['Drake/drake.json'];
-var modelNames = {'nathan':0}
+var modelsPaths = ['Drake/drake.json', 'respawn/respawn.json'];
+var modelNames = {'nathan':0, 'respawn': 1}
 var models = [];
 var loadedModels = 0;
 
@@ -28,7 +28,7 @@ function getModel(name){
 }
 
 function getObject(name){
-	return new THREE.Mesh(baseObjects[name].geometry, baseObjects[name].material, 0);
+	return new THREE.Mesh(baseObjects[name].geometry, baseObjects[name].material.clone(), 0);
 }
 
 function getSound(name){
@@ -36,6 +36,7 @@ function getSound(name){
 }
 
 function loadAll(){
+	document.getElementById('loading').style.display = 'block'
 	modelLoader = new THREE.JSONLoader();
 	textureLoader = new THREE.TextureLoader();
 	for (i=0; i<texturesPaths.length; i++){
@@ -103,7 +104,7 @@ function createBaseObjects(){
 	//planeMaterial.normalScale = 3;
 
 
-	var plane = new THREE.Mesh(new THREE.BoxGeometry(10, 250, 500), planeMaterial, 0);
+	var plane = new THREE.Mesh(new THREE.BoxGeometry(10, 550, 500), planeMaterial, 0);
 	plane.receiveShadow = true;
 	baseObjects['wall'] = plane;
 
@@ -119,5 +120,11 @@ function createBaseObjects(){
 	var plane = new THREE.Mesh(new THREE.BoxGeometry(250, 250, 40), planeMaterial, 0);
 	plane.receiveShadow = true;
 	baseObjects['platform-v'] = plane;
+
+	console.log(textures[2])
+	var skyMaterial = new THREE.MeshPhongMaterial({map:textures[3], specular: 0x111111});
+	var plane = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 0), skyMaterial, 0);
+	plane.receiveShadow = true;
+	baseObjects['sky'] = plane;
 }
 

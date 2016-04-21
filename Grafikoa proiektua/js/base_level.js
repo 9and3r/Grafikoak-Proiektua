@@ -6,11 +6,16 @@ BaseLevel = function(number, name){
 	this.ready = false;
 	this.playing = false;
 	this.movingObjects = [];
+	this.renderObjects = [];
 }
 
 BaseLevel.prototype.init = function(){
 	this.scene = new THREE.Scene({ antialias: true });
 	document.getElementById('game-over').style.display = 'none'
+	document.getElementById('level-text').style.display = 'block'
+	window.setTimeout(function(){
+		document.getElementById('level-text').style.display = 'none'
+	}, 100);
 	this.onInit();
 	getSound('warp').play();
 	this.ready = true;
@@ -35,6 +40,10 @@ BaseLevel.prototype.render = function(renderer, camera){
 			break;
 		}
 	}
+	for (var i = 0; i < this.renderObjects.length; i++){
+		this.renderObjects[i].render();
+	}
+	this.avatarControll.render(this, camera);
 	renderer.render(this.scene, camera);
 }
 
@@ -61,14 +70,14 @@ BaseLevel.prototype.die = function(showDie){
 		if (showDie){
 			this.showDie();
 		}else{
-			window.setTimeout(this.init.bind(this), 8000);
+			window.setTimeout(this.init.bind(this), 7000);
 		}
 	}
 }
 
 BaseLevel.prototype.showDie = function(){
 	document.getElementById('game-over').style.display = 'block'
-	window.setTimeout(this.init.bind(this), 8000);
+	window.setTimeout(this.init.bind(this), 7000);
 }
 
 BaseLevel.prototype.addSolidObject = function(object){
@@ -79,4 +88,9 @@ BaseLevel.prototype.addSolidObject = function(object){
 BaseLevel.prototype.addMovingObject = function(object){
 	this.movingObjects.push(object);
 	this.addSolidObject(object.object);
+}
+
+BaseLevel.prototype.addRenderObject = function(object){
+	//this.scene.add(object)
+	this.renderObjects.push(object);
 }

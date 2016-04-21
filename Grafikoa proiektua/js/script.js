@@ -17,7 +17,7 @@
 		     	renderer = new THREE.WebGLRenderer();
 
 		     	// Inicializamos el color del fondo y el tamano
-				renderer.setClearColor(0x000000, 1.0);
+				
 				renderer.setSize(window.innerWidth, window.innerHeight);
 				renderer.shadowMapEnabled = true;
 
@@ -30,7 +30,7 @@
 		     	// Incluimos la salida del render al elemento html
 				document.body.appendChild(renderer.domElement);
 
-				currentLevel = new Level1();
+				currentLevel = new Level2();
 
 				window.addEventListener("keydown", onKeyDown, false);
 				window.addEventListener("keyup", onKeyUp, false);
@@ -50,7 +50,7 @@
 		     }
 
 			function onGameLoaded() {
-
+				document.getElementById('loading').style.display = 'none'
 				currentLevel.init();
 			}
 

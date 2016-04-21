@@ -36,31 +36,11 @@ MobilePlatform.prototype.move = function(avatar){
 		if (colision && colision.object == this.object){
 			vector.setComponent(this.direction, moveTo);
 			if (avatar.tryMoveAvatar(vector, this.speed, true)){
-				var vector2 = vector.clone();
-				vector2.setComponent(this.direction, moveTo*-1);
-
-				var finish = false;
-
-				while(avatar.tryMoveAvatar(vector, this.speed, true) && avatar.tryMoveAvatar(vector2, this.speed, true) && !finish){
-					if (this.direction == 1){
-						avatar.avatar.scale.y -= 0.03;
-						if (avatar.avatar.scale.y < 0){
-							avatar.avatar.scale.y = 0;
-							this.finish = true;
-						}
-					}else{
-						avatar.avatar.scale.z -= 0.03;
-						avatar.avatar.scale.x -= 0.03;
-						if (avatar.avatar.scale.z < 0){
-							avatar.avatar.scale.z = 0;
-						}
-						if (avatar.avatar.scale.x < 0){
-							avatar.avatar.scale.x = 0;
-						}
-						if (avatar.avatar.scale.z == 0 && avatar.avatar.scale.x == 0){
-							finish = true;
-						}
-					}
+				if (this.direction == 1){
+					avatar.targetScale.y = 0.1;
+				}else{
+					avatar.targetScale.x = 0.1;
+					avatar.targetScale.z = 0.1;
 				}
 				return true;
 			}
