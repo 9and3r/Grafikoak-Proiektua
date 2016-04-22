@@ -1,4 +1,4 @@
-BaseLevel = function(number, name){
+BaseLevel = function(number, name, music){
 	this.number = number;
 	this.name = name;
 	this.scene = null;
@@ -7,6 +7,7 @@ BaseLevel = function(number, name){
 	this.playing = false;
 	this.movingObjects = [];
 	this.renderObjects = [];
+	this.sceneMusic = music;
 }
 
 BaseLevel.prototype.init = function(){
@@ -16,13 +17,40 @@ BaseLevel.prototype.init = function(){
 	window.setTimeout(function(){
 		document.getElementById('level-text').style.display = 'none'
 	}, 100);
+
+
+	this.avatarControll = new AvatarControll(getModel('nathan'));
+	this.avatarControll.avatar.position.y = 150;
+	this.scene.add(this.avatarControll.avatar);
+
+	var spawn = new Spawn(this, this.scene, false, false);
+	this.addRenderObject(spawn);
+
 	this.onInit();
+
 	getSound('warp').play();
+	
+	if (this.sceneMusic){
+		this.sceneMusic.play();
+		this.sceneMusic.loop = true;
+	}
+
 	this.ready = true;
 	this.playing = true;
 }
 
 BaseLevel.prototype.onInit = function(){
+
+}
+
+BaseLevel.prototype.finish = function(){
+	if (this.sceneMusic){
+		this.sceneMusic.pause();
+	}
+	this.onFinish();
+}
+
+BaseLevel.prototype.onFinish = function(){
 
 }
 
@@ -66,6 +94,7 @@ BaseLevel.prototype.onKeyUp = function(e){
 BaseLevel.prototype.die = function(showDie){
 	if (this.playing){
 		this.playing = false;
+		this.finish();
 		getSound('die').play();
 		if (showDie){
 			this.showDie();

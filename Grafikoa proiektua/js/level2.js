@@ -1,5 +1,5 @@
 function Level2(){
-	BaseLevel.call(this, 1, 'Level 1');
+	BaseLevel.call(this, 1, 'Level 1', getSound('pyramid'));
 }
 
 Level2.prototype = Object.create(BaseLevel.prototype);
@@ -7,9 +7,7 @@ Level2.prototype.constructor = Level2;
 
 Level2.prototype.onInit = function(){
 
-	this.avatarControll = new AvatarControll(getModel('nathan'));
-	this.avatarControll.avatar.position.y = 150;
-	this.scene.add(this.avatarControll.avatar);
+	
 
 	//var waterGeometry = new THREE.BoxGeometry( 200, 500, 1);
 	//var waterMaterial = new THREE.MeshBasicMaterial( {color: 0x1A7A3A, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending} );
@@ -18,14 +16,14 @@ Level2.prototype.onInit = function(){
 	//agua.position.y = -10;
 	//scene.add(agua);
 	//solidObjects.push(agua);
-	//var audio = new Audio('uncharted.mp3');
-	//audio.loop = true;
-	//audio.play();
 
 	var light = new THREE.AmbientLight( 0x0A0A0A ); // soft white light
-	this.scene.add( light );
+	this.scene.add(light);
 
-	var spawn = new Spawn(this, this.scene);
+	
+
+	var spawn = new Spawn(this, this.scene, true, true);
+	spawn.setPosition(0, 0, 250);
 	this.addRenderObject(spawn);
 
 

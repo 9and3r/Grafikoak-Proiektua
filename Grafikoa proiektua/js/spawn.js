@@ -1,16 +1,16 @@
-Spawn = function(level, scene){
+Spawn = function(level, scene, active, directionUp){
 
 
 	this.base = new THREE.Object3D();
-	this.base.object = this;
-	scene.add(this.base);
-
+	this.active = active;
+	this.directionUp = directionUp;
 
 	var geometry = new THREE.CylinderGeometry(15, 17, 5, 32 );
 	var material = new THREE.MeshPhongMaterial( {color: 0xffff00, specular: 0x111111} );
-	var cylinder = new THREE.Mesh(geometry, material);
-	this.base.add(cylinder);
-	level.addSolidObject(cylinder);
+	this.cylinder = new THREE.Mesh(geometry, material);
+	this.cylinder.controller = this;
+	this.base.add(this.cylinder);
+	level.addSolidObject(this.cylinder);
 
 	this.particleCount = 3800;
 
@@ -21,7 +21,7 @@ Spawn = function(level, scene){
  	});
 
 
- 	this.currentColor = [1, 1, 1];
+ 	this.currentColor = [Math.random(), Math.random(), Math.random()];
  	this.targetColor = [Math.random(), Math.random(), Math.random()];
 
  	this.light = new THREE.PointLight( 0xff0000, 5, 100 );
@@ -40,19 +40,38 @@ Spawn = function(level, scene){
 	// create the particle system
  	this.particleSystem = new THREE.ParticleSystem(this.particles, this.particleMaterial);
  	this.base.add(this.particleSystem);
+
+ 	scene.add(this.base);
+}
+
+Spawn.prototype.setPosition = function(x, y, z){
+	this.cylinder.position.x = x;
+	this.cylinder.position.y = y;
+	this.cylinder.position.z = z;
+	this.base.position.x = x;
+	this.base.position.y = y;
+	this.base.position.z = z;
 }
 
 Spawn.radious = 15;
-Spawn.maxY = 200;
+Spawn.maxY = 250;
 Spawn.colorChange = 0.01;
+Spawn.speed = 0.5;
 
 Spawn.prototype.render = function(avatar){
 	this.particleSystem.rotation.y += 0.02;
-	for (var i=0; i<this.particleCount; i++){
+	for (var i=0; i<this.particles.vertices.length; i++){
 		var particle = this.particles.vertices[i];
-		particle.y += 0.3;
-		if (particle.y > Spawn.maxY){
-			particle.y = 0;
+		if (this.directionUp){
+			particle.y += Spawn.speed;
+			if (particle.y > Spawn.maxY){
+				particle.y = 0;
+			}
+		}else{
+			particle.y -= Spawn.speed;
+			if (particle.y < 0){
+				particle.y = Spawn.maxY;
+			}
 		}
 	}
 	this.calculateColor();
@@ -75,6 +94,11 @@ Spawn.prototype.calculateColor = function(){
 	this.light.color = this.particleMaterial.color;
 }
 
-Spawn.prototype.onFloor = function(){
-	console.log("on floor");
+Spawn.prototype.onFloor = function(avatarControll){
+	console.log(this.active)
+	if (this.active){
+		var sound = getSound('finish');
+		sound.play();
+		avatarControll.upAnimation = true;
+	}
 }

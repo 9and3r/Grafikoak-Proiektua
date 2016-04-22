@@ -4,6 +4,7 @@
 			var raycaster;
 			var solidObjects = [];
 			var currentLevel;
+			var stats;
 
 			/**
 			 * Inicializacion Three.js
@@ -37,6 +38,10 @@
 
 				//showLoading();
 				
+				stats = new Stats();
+				stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+				document.body.appendChild( stats.dom );
+				stats.dom.style.display = 'block'
 				
 				requestAnimationFrame(render);
 		     }
@@ -61,10 +66,14 @@
 			function render() {
 				// render utilizando requestAnimationFrame
 				//moveCamaraAndPersonaje();
+				stats.begin();
+
 				onRenderLoader();
 				if (currentLevel.ready){
 					currentLevel.render(renderer, camera)
 				}
+				stats.end();
+
 
 				requestAnimationFrame(render);
 			}

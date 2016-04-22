@@ -14,8 +14,8 @@ var models = [];
 var loadedModels = 0;
 
 // Musica
-var soundsPath = ['music/pyramid.mp3', 'music/die.mp3', 'music/warp.mp3'];
-var soundNames = {'pyramid':0, 'die':1, 'warp':2};
+var soundsPath = ['music/pyramid.mp3', 'music/die.mp3', 'music/warp.mp3', 'music/finish.mp3'];
+var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3};
 var sounds = [];
 var loadedSounds = 0;
 

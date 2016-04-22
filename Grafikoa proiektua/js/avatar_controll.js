@@ -19,11 +19,14 @@ AvatarControll = function(avatar){
 	this.avatar.scale.z = 1;
 
 	this.targetScale = new THREE.Vector3(1, 1, 1);
+
+	this.upAnimation = false;
 }
 
 AvatarControll.speed = 2;
 AvatarControll.gravity = 0.4;
 AvatarControll.minGravity = -1;
+AvatarControll.upAnimationSpeed = 0.7;
 AvatarControll.cameraY = 60;
 AvatarControll.cameraZ = -100;
 AvatarControll.camaraRotationSpeed = 0.03;
@@ -90,29 +93,34 @@ AvatarControll.prototype.onKeyUp = function(e){
 
 AvatarControll.prototype.moveAvatar = function(canmove){
 
-	// Rotar el avatar para moverlo en la direccion correcta
-	var rotation = this.avatar.rotation.y;
-	this.avatar.rotation.y = this.angle;
+	if (!this.upAnimation){
+		// Rotar el avatar para moverlo en la direccion correcta
+		var rotation = this.avatar.rotation.y;
+		this.avatar.rotation.y = this.angle;
 
-	// Comprobar cuantas teclas de movimientos estan pulsadas
-	var keyCount = 0;
-	for (pushed in this.pressedKeys){
-		if (this.pressedKeys[pushed]){
-			keyCount ++;
+		// Comprobar cuantas teclas de movimientos estan pulsadas
+		var keyCount = 0;
+		for (pushed in this.pressedKeys){
+			if (this.pressedKeys[pushed]){
+				keyCount ++;
+			}
 		}
-	}
-	this.moveVertical(keyCount, rotation, canmove);
-	if (canmove){
-		this.moveHorizontal(keyCount, rotation);
-		this.rotateAvatar(keyCount, rotation);
+		this.moveVertical(keyCount, rotation, canmove);
+		if (canmove){
+			this.moveHorizontal(keyCount, rotation);
+			this.rotateAvatar(keyCount, rotation);
+		}else{
+			this.avatar.rotation.y = rotation;
+		}
+	
+		// Si es necesario cambiar el giro de la camara para el siguiente frame
+		if (this.targetAngle != this.angle){
+			this.changeRotation();
+		}
 	}else{
-		this.avatar.rotation.y = rotation;
+		this.avatar.position.y += AvatarControll.upAnimationSpeed;
 	}
 	
-	// Si es necesario cambiar el giro de la camara para el siguiente frame
-	if (this.targetAngle != this.angle){
-		this.changeRotation();
-	}
 }
 
 AvatarControll.prototype.moveHorizontal = function(keyCount, rotation){
@@ -135,7 +143,7 @@ AvatarControll.prototype.moveHorizontal = function(keyCount, rotation){
 	}
 }
 
-
+var a = true;
 
 AvatarControll.prototype.moveVertical = function(keyCount, rotation, canmove){
 	// Calcular la nueva velocidad vertical
@@ -146,12 +154,14 @@ AvatarControll.prototype.moveVertical = function(keyCount, rotation, canmove){
 		this.tryMoveAvatar(new THREE.Vector3(0, 1, 0), this.verticalSpeed);
 		this.floor = null;
 	}else if(this.verticalSpeed < 0){
+
 		// Intentar mover el personaje hacia abajo y comprobar si esta en el suelo
 		this.floor = this.tryMoveAvatar(new THREE.Vector3(0, -1, 0), this.verticalSpeed * -1);
 		if (this.floor){
+			this.floor = this.floor.object;
 			this.verticalSpeed = 0;
-			if (this.floor.object.object && this.floor.object.object instanceof Spawn){
-				this.floor.object.onFloor();
+			if (this.floor.controller && canmove){
+				this.floor.controller.onFloor(this);
 			}
 		}
 	}

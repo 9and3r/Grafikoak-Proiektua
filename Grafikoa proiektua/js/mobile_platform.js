@@ -45,7 +45,7 @@ MobilePlatform.prototype.move = function(avatar){
 				return true;
 			}
 		}else{
-			if (avatar.floor && avatar.floor.object == this.object){
+			if (avatar.floor && avatar.floor == this.object){
 				vector.setComponent(this.direction, moveTo);
 				avatar.tryMoveAvatar(vector, this.speed, true);
 			}
