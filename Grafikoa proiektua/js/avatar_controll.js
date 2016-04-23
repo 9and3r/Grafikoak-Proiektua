@@ -21,6 +21,11 @@ AvatarControll = function(avatar){
 	this.targetScale = new THREE.Vector3(1, 1, 1);
 
 	this.upAnimation = false;
+
+	this.currentCameraZ = -80;
+	this.currentCameraY = 60;
+	this.targetCameraZ = -130;
+	this.targetCameraY = 60;
 }
 
 AvatarControll.speed = 2;
@@ -28,8 +33,7 @@ AvatarControll.gravity = 0.4;
 AvatarControll.minGravity = -1;
 AvatarControll.upAnimationSpeed = 0.7;
 AvatarControll.upAnimationRotationSpeed = 0.03;
-AvatarControll.cameraY = 60;
-AvatarControll.cameraZ = -100;
+AvatarControll.cameraSpeed = 3;
 AvatarControll.camaraRotationSpeed = 0.03;
 AvatarControll.scaleSpeed = 0.03;
 
@@ -43,8 +47,18 @@ AvatarControll.prototype.moveCameraAndAvatar = function(canmove, camera){
 		camera.rotation.y = this.angle;
 		camera.rotation.x = 0;
 		camera.rotation.z = 0;
-		camera.translateY(AvatarControll.cameraY);
-		camera.translateZ(AvatarControll.cameraZ);
+		if (this.targetCameraY - this.currentCameraY > AvatarControll.cameraSpeed){
+			this.currentCameraY += AvatarControll.cameraSpeed;
+		}else if (this.currentCameraY - this.targetCameraY > AvatarControll.cameraSpeed){
+			this.currentCameraY -= AvatarControll.cameraSpeed;
+		}
+		if (this.targetCameraZ - this.currentCameraZ > AvatarControll.cameraSpeed){
+			this.currentCameraZ += AvatarControll.cameraSpeed;
+		}else if (this.currentCameraZ - this.targetCameraZ > AvatarControll.cameraSpeed){
+			this.currentCameraZ -= AvatarControll.cameraSpeed;
+		}
+		camera.translateY(this.currentCameraY);
+		camera.translateZ(this.currentCameraZ);
 		camera.lookAt(this.avatarCenterPos);
 	}
 	this.calculateScale();
@@ -146,8 +160,6 @@ AvatarControll.prototype.moveHorizontal = function(keyCount, rotation){
 		}
 	}
 }
-
-var a = true;
 
 AvatarControll.prototype.moveVertical = function(keyCount, rotation, canmove){
 	// Calcular la nueva velocidad vertical
@@ -272,7 +284,7 @@ AvatarControll.getCheckPosition = function(y, position, distance, direction, pos
 }
 
 AvatarControll.prototype.checkIfCanMove = function(direction, distance, checkAngle){
-	if (checkAngle){
+	if (!checkAngle){
 		worldDirection = direction.clone();
 		worldDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.angle);
 	}else{
@@ -294,11 +306,10 @@ AvatarControll.prototype.checkIfCanMove = function(direction, distance, checkAng
 		i++;	
 	}
 	return colision;
-	
 }
 
 AvatarControll.prototype.tryMoveAvatar = function(direction, distance, checkAngle){
-	var object = this.checkIfCanMove(direction, distance);
+	var object = this.checkIfCanMove(direction, distance, checkAngle);
 	if (!object){
 		if (checkAngle){
 			this.avatar.position.x += direction.x * distance;
@@ -309,8 +320,6 @@ AvatarControll.prototype.tryMoveAvatar = function(direction, distance, checkAngl
 			this.avatar.translateY(direction.y * distance);
 			this.avatar.translateZ(direction.z * distance);
 		}
-		this.avatar.updateMatrix();
-		this.avatar.updateMatrixWorld(true);
 	}
 	return object;
 }

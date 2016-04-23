@@ -53,5 +53,11 @@ Level2.prototype.onInit = function(){
 	this.addRenderObject(spawn);
 }
 
+Level2.prototype.onRender = function(){
+	if (this.avatarControll.avatar.position.z > 600){
+		//this.avatarControll.targetAngle = Math.PI * 3 / 2;
+	}
+}
+
 
 

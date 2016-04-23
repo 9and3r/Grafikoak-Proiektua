@@ -98,5 +98,6 @@ Spawn.prototype.onFloor = function(avatarControll){
 		var sound = getSound('finish');
 		sound.play();
 		avatarControll.upAnimation = true;
+		avatarControll.targetCameraZ = -200;
 	}
 }
