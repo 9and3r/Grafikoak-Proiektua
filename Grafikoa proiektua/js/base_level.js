@@ -31,6 +31,7 @@ BaseLevel.prototype.init = function(){
 	getSound('warp').play();
 	
 	if (this.sceneMusic){
+		this.sceneMusic.currentTime = 0;
 		this.sceneMusic.play();
 		this.sceneMusic.loop = true;
 	}

@@ -6,6 +6,10 @@
 			var currentLevel;
 			var stats;
 
+			var cameraTest = false;
+			var camControls;
+			var clock;
+
 			/**
 			 * Inicializacion Three.js
 		     *
@@ -13,6 +17,7 @@
 			 * Se llama cuando se carga la ventana mediante la funcion window.onload
 		     **/
 		     function init(){
+		     	clock = new THREE.Clock();
 		     	loadAll();
 		     	
 		     	renderer = new THREE.WebGLRenderer();
@@ -36,6 +41,11 @@
 				window.addEventListener("keydown", onKeyDown, false);
 				window.addEventListener("keyup", onKeyUp, false);
 
+				if (cameraTest){
+					window.addEventListener("keypress", onKeyPress, false);
+				}
+				
+
 				//showLoading();
 				
 				stats = new Stats();
@@ -52,6 +62,38 @@
 
 		     function onKeyUp(e){
 		     	currentLevel.onKeyUp(e);
+		     }
+
+		     var cameraSpeed = 3;
+		     var cameraRotationSpeed = 0.1;
+		     function onKeyPress(e){
+		     	console.log(e.keyCode)
+		     	switch(e.keyCode){
+		     		case 56:
+		     			camera.translateZ(-cameraSpeed);
+		     			break;
+		     		case 53:
+		     			camera.translateZ(cameraSpeed);
+		     			break;
+		     		case 52:
+		     			camera.translateX(-cameraSpeed);
+		     			break;
+		     		case 54:
+		     			camera.translateX(cameraSpeed);
+		     			break;
+		     		case 241:
+		     			camera.rotation.y -= cameraRotationSpeed;
+		     			break;
+		     		case 107:
+		     			camera.rotation.y += cameraRotationSpeed;
+		     			break;
+		     		case 111:
+		     			camera.translateY(cameraSpeed);
+		     			break;
+		     		case 108:
+		     			camera.translateY(-cameraSpeed);
+		     			break;
+		     	}
 		     }
 
 			function onGameLoaded() {
@@ -74,6 +116,9 @@
 				}
 				stats.end();
 
+				if (cameraTest){
+					
+				}
 
 				requestAnimationFrame(render);
 			}

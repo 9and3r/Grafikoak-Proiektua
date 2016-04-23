@@ -1,10 +1,18 @@
+// Cargadores
 var modelLoader;
 var textureLoader;
 
 // Texturas
-var texturesPaths = ['images/rock/rock_COLOR.png', 'images/rock/rock_NRM.png', 'images/rock/rock_OCC.png', 'images/sky.jpg'];
+var texturesPaths = ['images/rock/rock_COLOR.png', 'images/rock/rock_NRM.png', 'images/rock/rock_OCC.png',
+					 'images/sky.jpg',
+					 'images/neon/neon_COLOR.png', 'images/neon/neon_NRM.png', 'images/neon/neon_OCC.png'];
 var textures = [];
 var loadedTextures = 0;
+
+
+// Materiales
+var materials = [];
+var materialsNames = {'invisible': 0, 'rock': 1};
 
 
 // Modelos
@@ -20,19 +28,16 @@ var sounds = [];
 var loadedSounds = 0;
 
 
-
-var baseObjects = {};
-
 function getModel(name){
 	return models[modelNames[name]].clone();
 }
 
-function getObject(name){
-	return new THREE.Mesh(baseObjects[name].geometry, baseObjects[name].material.clone(), 0);
-}
-
 function getSound(name){
 	return sounds[soundNames[name]];
+}
+
+function getMaterial(name){
+	return materials[materialsNames[name]]
 }
 
 function loadAll(){
@@ -51,7 +56,6 @@ function loadAll(){
 }
 
 function checkLoaded(){
-	//console.log(loadedTextures)
 	if (loadedTextures == texturesPaths.length && loadedModels == modelsPaths.length && loadedSounds == soundsPath.length){
 		createBaseObjects();
 		// Todo esta cargado. Empezar el juego!
@@ -92,39 +96,16 @@ function onSoundLoaded(){
 }
 
 function createBaseObjects(){
-	var texture = textures[0];
-	//texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-	//texture.repeat.set( 10, 10 );
 
-	var planeGeometry = new THREE.BoxGeometry(200, 850, 1);
-	var planeMaterial = new THREE.MeshPhongMaterial({map:texture, specular: 0x111111});
+	// Material invisible
+	var invisibleMaterial = new THREE.MeshBasicMaterial();
+	invisibleMaterial.visible = false;
+	materials.push(invisibleMaterial);
+
+	// Rock material
+	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[0], specular: 0x111111});
 	planeMaterial.normalMap = textures[1];
 	planeMaterial.bumpMap = textures[2];
-	//planeMaterial.bumpScale = 100;
-	//planeMaterial.normalScale = 3;
-
-
-	var plane = new THREE.Mesh(new THREE.BoxGeometry(10, 550, 500), planeMaterial, 0);
-	plane.receiveShadow = true;
-	baseObjects['wall'] = plane;
-
-	var plane = new THREE.Mesh(new THREE.BoxGeometry(250, 250, 200), planeMaterial, 0);
-	plane.rotation.z = 0.5 * Math.PI;
-	plane.receiveShadow = true;
-	baseObjects['floor'] = plane;
-
-	var plane = new THREE.Mesh(new THREE.BoxGeometry(80, 250, 80), planeMaterial, 0);
-	plane.receiveShadow = true;
-	baseObjects['platform-h'] = plane;
-
-	var plane = new THREE.Mesh(new THREE.BoxGeometry(250, 250, 40), planeMaterial, 0);
-	plane.receiveShadow = true;
-	baseObjects['platform-v'] = plane;
-
-	console.log(textures[2])
-	var skyMaterial = new THREE.MeshPhongMaterial({map:textures[3], specular: 0x111111});
-	var plane = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 0), skyMaterial, 0);
-	plane.receiveShadow = true;
-	baseObjects['sky'] = plane;
+	materials.push(planeMaterial);
 }
 

@@ -1,15 +1,13 @@
 Spawn = function(level, scene, active, directionUp){
 
-
 	this.base = new THREE.Object3D();
 	this.active = active;
 	this.directionUp = directionUp;
 
 	var geometry = new THREE.CylinderGeometry(15, 17, 5, 32 );
-	var material = new THREE.MeshPhongMaterial( {color: 0xffff00, specular: 0x111111} );
-	this.cylinder = new THREE.Mesh(geometry, material);
-	this.cylinder.controller = this;
+	this.cylinder = new THREE.Mesh(geometry, getMaterial('neon'));
 	this.base.add(this.cylinder);
+	this.cylinder.controller = this;
 	level.addSolidObject(this.cylinder);
 
 	this.particleCount = 3800;
@@ -46,7 +44,7 @@ Spawn = function(level, scene, active, directionUp){
 
 Spawn.prototype.setPosition = function(x, y, z){
 	this.cylinder.position.x = x;
-	this.cylinder.position.y = y;
+	this.cylinder.position.y = y + 2.5;
 	this.cylinder.position.z = z;
 	this.base.position.x = x;
 	this.base.position.y = y;
@@ -57,6 +55,7 @@ Spawn.radious = 15;
 Spawn.maxY = 250;
 Spawn.colorChange = 0.01;
 Spawn.speed = 0.5;
+Spawn.nearMax = 5;
 
 Spawn.prototype.render = function(avatar){
 	this.particleSystem.rotation.y += 0.02;
@@ -95,8 +94,7 @@ Spawn.prototype.calculateColor = function(){
 }
 
 Spawn.prototype.onFloor = function(avatarControll){
-	console.log(this.active)
-	if (this.active){
+	if (this.active && Math.abs(avatarControll.avatar.position.x - this.cylinder.position.x) < Spawn.nearMax && Math.abs(avatarControll.avatar.position.z - this.cylinder.position.z) < Spawn.nearMax){
 		var sound = getSound('finish');
 		sound.play();
 		avatarControll.upAnimation = true;

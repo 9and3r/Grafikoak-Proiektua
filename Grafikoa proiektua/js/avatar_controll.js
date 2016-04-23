@@ -27,6 +27,7 @@ AvatarControll.speed = 2;
 AvatarControll.gravity = 0.4;
 AvatarControll.minGravity = -1;
 AvatarControll.upAnimationSpeed = 0.7;
+AvatarControll.upAnimationRotationSpeed = 0.03;
 AvatarControll.cameraY = 60;
 AvatarControll.cameraZ = -100;
 AvatarControll.camaraRotationSpeed = 0.03;
@@ -34,16 +35,18 @@ AvatarControll.scaleSpeed = 0.03;
 
 AvatarControll.prototype.moveCameraAndAvatar = function(canmove, camera){
 	this.moveAvatar(canmove);
-	camera.position.copy(this.avatar.position);
-	camera.rotation.y = this.angle;
-	camera.rotation.x = 0;
-	camera.rotation.z = 0;
-	camera.translateY(AvatarControll.cameraY);
-	camera.translateZ(AvatarControll.cameraZ);
 	this.avatarCenterPos.x = this.avatar.position.x;
 	this.avatarCenterPos.y = this.avatar.position.y + 30;
 	this.avatarCenterPos.z = this.avatar.position.z;
-	camera.lookAt(this.avatarCenterPos);
+	if (!cameraTest){
+		camera.position.copy(this.avatar.position);
+		camera.rotation.y = this.angle;
+		camera.rotation.x = 0;
+		camera.rotation.z = 0;
+		camera.translateY(AvatarControll.cameraY);
+		camera.translateZ(AvatarControll.cameraZ);
+		camera.lookAt(this.avatarCenterPos);
+	}
 	this.calculateScale();
 }
 
@@ -119,6 +122,7 @@ AvatarControll.prototype.moveAvatar = function(canmove){
 		}
 	}else{
 		this.avatar.position.y += AvatarControll.upAnimationSpeed;
+		this.avatar.rotation.y += AvatarControll.upAnimationRotationSpeed;
 	}
 	
 }
@@ -241,25 +245,25 @@ AvatarControll.getCheckPosition = function(y, position, distance, direction, pos
 		currentPos.y += y;
 		positions.push(currentPos);
 	}
-	if (direction.y != 0 || direction.x > 0){
+	if (direction.y != 0 || direction.x > 0 || true){
 		currentPos = position.clone();
 		currentPos.y += y;
 		currentPos.x += distance;
 		positions.push(currentPos);
 	}
-	if (direction.y != 0 || direction.x < 0){
+	if (direction.y != 0 || direction.x < 0|| true){
 		currentPos = position.clone();
 		currentPos.y += y;
 		currentPos.x -= distance;
 		positions.push(currentPos);
 	}
-	if (direction.y != 0 || direction.z > 0){
+	if (direction.y != 0 || direction.z > 0|| true){
 		currentPos = position.clone();
 		currentPos.y += y;
 		currentPos.z += distance;
 		positions.push(currentPos);
 	}
-	if (direction.y != 0 || direction.z < 0){
+	if (direction.y != 0 || direction.z < 0|| true){
 		currentPos = position.clone();
 		currentPos.y += y;
 		currentPos.z -= distance;
@@ -305,6 +309,8 @@ AvatarControll.prototype.tryMoveAvatar = function(direction, distance, checkAngl
 			this.avatar.translateY(direction.y * distance);
 			this.avatar.translateZ(direction.z * distance);
 		}
+		this.avatar.updateMatrix();
+		this.avatar.updateMatrixWorld(true);
 	}
 	return object;
 }
