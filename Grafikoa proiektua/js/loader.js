@@ -3,30 +3,41 @@ var modelLoader;
 var textureLoader;
 
 // Texturas
-var texturesPaths = ['images/rock/rock_COLOR.png', 'images/rock/rock_NRM.png', 'images/rock/rock_OCC.png',
-					 'images/sky.jpg',
-					 'images/neon/neon_COLOR.png', 'images/neon/neon_NRM.png', 'images/neon/neon_OCC.png'];
+var texturesPaths = ['rock/rock_COLOR.png', 'rock/rock_NRM.png', 'rock/rock_OCC.png', // 0, 1, 2
+					 'sky.jpg', // 3
+					 'grass.png', // 4
+					 'tierra.png', // 5
+					 'tree.png', // 6
+					 'bush.png' // 7
+					  ]; 
 var textures = [];
+var texturesNames = {'particle': 8};
 var loadedTextures = 0;
 
 
 // Materiales
 var materials = [];
-var materialsNames = {'invisible': 0, 'rock': 1};
+var materialsNames = {'invisible': 0, 'rock': 1, 'proba': 2, 'grass': 3, 'tierra': 4};
 
 
 // Modelos
-var modelsPaths = ['Drake/drake.json', 'respawn/respawn.json'];
-var modelNames = {'nathan':0, 'respawn': 1}
+var modelsPaths = ['Drake/drake.json'];
+var modelNames = {'nathan':0}
 var models = [];
 var loadedModels = 0;
 
 // Musica
-var soundsPath = ['music/pyramid.mp3', 'music/die.mp3', 'music/warp.mp3', 'music/finish.mp3'];
-var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3};
+var soundsPath = ['pyramid.mp3', 'die.mp3', 'warp.mp3', 'finish.mp3', 'uncharted.mp3'];
+var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3, 'uncharted': 4};
 var sounds = [];
 var loadedSounds = 0;
 
+var objects = [];
+var objectsNames = {'tree': 0, 'bush': 1};
+
+function getObject(name){
+	return objects[objectsNames[name]].clone();
+}
 
 function getModel(name){
 	return models[modelNames[name]].clone();
@@ -38,6 +49,10 @@ function getSound(name){
 
 function getMaterial(name){
 	return materials[materialsNames[name]]
+}
+
+function getTexture(name){
+	return textures[texturesNames[name]]
 }
 
 function loadAll(){
@@ -64,7 +79,7 @@ function checkLoaded(){
 }
 
 function loadModel(src, i){
-	modelLoader.load(src, onModelLoaded.bind(null, i));
+	modelLoader.load('recursos/' + src, onModelLoaded.bind(null, i));
 }
 
 function onModelLoaded(i, geometry, materials){
@@ -74,7 +89,7 @@ function onModelLoaded(i, geometry, materials){
 }
 
 function loadTexture(src, i){
-	textureLoader.load(src, onTextureLoaded.bind(undefined, i));
+	textureLoader.load('recursos/imagenes/' + src, onTextureLoaded.bind(undefined, i));
 }
 
 function onTextureLoaded(i, texture){
@@ -84,7 +99,7 @@ function onTextureLoaded(i, texture){
 }
 
 function loadSound(src, i){
-	sounds[i] = new Audio(src);
+	sounds[i] = new Audio('recursos/audio/' + src);
 	sounds[i].load();
 	sounds[i].oncanplaythrough = onSoundLoaded;
 	
@@ -107,5 +122,37 @@ function createBaseObjects(){
 	planeMaterial.normalMap = textures[1];
 	planeMaterial.bumpMap = textures[2];
 	materials.push(planeMaterial);
+
+	// Sky material
+	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[3], specular: 0x111111});
+	materials.push(planeMaterial);
+
+	// Grass material
+	textures[4].wrapS = THREE.RepeatWrapping;
+	textures[4].wrapT = THREE.RepeatWrapping;
+	textures[4].repeat.set(50, 50);
+	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[4]});
+	materials.push(planeMaterial);
+
+
+	// Material tierra
+	textures[5].wrapS = THREE.RepeatWrapping;
+	textures[5].wrapT = THREE.RepeatWrapping;
+	textures[5].repeat.set(5, 15);
+	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[5], specular: 0x111111});
+	materials.push(planeMaterial);
+
+	// Fake tree
+	var material = new THREE.SpriteMaterial({ map : textures[6] });
+	var tree = new THREE.Sprite(material);
+	tree.scale.set(128, 140, 1);
+	tree.position.y = 0;
+	objects.push(tree);
+
+	// Fake bush
+	var material = new THREE.SpriteMaterial({ map : textures[7] });
+	var object = new THREE.Sprite(material);
+	object.scale.set(80, 30, 1);
+	objects.push(object);
 }
 

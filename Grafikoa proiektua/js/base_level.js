@@ -32,8 +32,9 @@ BaseLevel.prototype.init = function(){
 	
 	if (this.sceneMusic){
 		this.sceneMusic.currentTime = 0;
-		this.sceneMusic.play();
 		this.sceneMusic.loop = true;
+		this.sceneMusic.play();
+		console.log("sartu naiz")
 	}
 
 	this.ready = true;

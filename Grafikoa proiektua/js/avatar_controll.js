@@ -42,25 +42,23 @@ AvatarControll.prototype.moveCameraAndAvatar = function(canmove, camera){
 	this.avatarCenterPos.x = this.avatar.position.x;
 	this.avatarCenterPos.y = this.avatar.position.y + 30;
 	this.avatarCenterPos.z = this.avatar.position.z;
-	if (!cameraTest){
-		camera.position.copy(this.avatar.position);
-		camera.rotation.y = this.angle;
-		camera.rotation.x = 0;
-		camera.rotation.z = 0;
-		if (this.targetCameraY - this.currentCameraY > AvatarControll.cameraSpeed){
-			this.currentCameraY += AvatarControll.cameraSpeed;
-		}else if (this.currentCameraY - this.targetCameraY > AvatarControll.cameraSpeed){
-			this.currentCameraY -= AvatarControll.cameraSpeed;
-		}
-		if (this.targetCameraZ - this.currentCameraZ > AvatarControll.cameraSpeed){
-			this.currentCameraZ += AvatarControll.cameraSpeed;
-		}else if (this.currentCameraZ - this.targetCameraZ > AvatarControll.cameraSpeed){
-			this.currentCameraZ -= AvatarControll.cameraSpeed;
-		}
-		camera.translateY(this.currentCameraY);
-		camera.translateZ(this.currentCameraZ);
-		camera.lookAt(this.avatarCenterPos);
+	camera.position.copy(this.avatar.position);
+	camera.rotation.y = this.angle;
+	camera.rotation.x = 0;
+	camera.rotation.z = 0;
+	if (this.targetCameraY - this.currentCameraY > AvatarControll.cameraSpeed){
+		this.currentCameraY += AvatarControll.cameraSpeed;
+	}else if (this.currentCameraY - this.targetCameraY > AvatarControll.cameraSpeed){
+		this.currentCameraY -= AvatarControll.cameraSpeed;
 	}
+	if (this.targetCameraZ - this.currentCameraZ > AvatarControll.cameraSpeed){
+		this.currentCameraZ += AvatarControll.cameraSpeed;
+	}else if (this.currentCameraZ - this.targetCameraZ > AvatarControll.cameraSpeed){
+		this.currentCameraZ -= AvatarControll.cameraSpeed;
+	}
+	camera.translateY(this.currentCameraY);
+	camera.translateZ(this.currentCameraZ);
+	camera.lookAt(this.avatarCenterPos);
 	this.calculateScale();
 }
 
