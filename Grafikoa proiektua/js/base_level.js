@@ -11,14 +11,29 @@ BaseLevel = function(number, name, music){
 }
 
 BaseLevel.prototype.init = function(){
+	
+	this.initScene();
+	this.initAvatarAndSpawn();
+	this.initMusic();
+	this.onInit();
+
+	var axisHelper = new THREE.AxisHelper(300);
+	this.scene.add( axisHelper );
+
+	this.ready = true;
+	this.playing = true;
+}
+
+BaseLevel.prototype.initScene = function(){
 	this.scene = new THREE.Scene({ antialias: true });
 	document.getElementById('game-over').style.display = 'none'
 	document.getElementById('level-text').style.display = 'block'
 	window.setTimeout(function(){
 		document.getElementById('level-text').style.display = 'none'
 	}, 100);
+}
 
-
+BaseLevel.prototype.initAvatarAndSpawn = function(){
 	this.avatarControll = new AvatarControll(getModel('nathan'));
 	this.avatarControll.avatar.position.y = 150;
 	this.scene.add(this.avatarControll.avatar);
@@ -26,19 +41,15 @@ BaseLevel.prototype.init = function(){
 	var spawn = new Spawn(this, this.scene, false, false);
 	this.addRenderObject(spawn);
 
-	this.onInit();
-
 	getSound('warp').play();
-	
+}
+
+BaseLevel.prototype.initMusic = function(){
 	if (this.sceneMusic){
 		this.sceneMusic.currentTime = 0;
 		this.sceneMusic.loop = true;
 		this.sceneMusic.play();
-		console.log("sartu naiz")
 	}
-
-	this.ready = true;
-	this.playing = true;
 }
 
 BaseLevel.prototype.onInit = function(){
@@ -56,10 +67,18 @@ BaseLevel.prototype.onFinish = function(){
 
 }
 
+
+
 BaseLevel.prototype.render = function(renderer, camera){
-	this.onRender();
+
+
+
+
+	this.onRender(camera);
+
 	if(this.avatarControll){
 		this.avatarControll.moveCameraAndAvatar(this.playing, camera);
+
 		if (this.avatarControll.avatar.position.y < -100 && this.playing){
 			this.die(true);
 		}
@@ -70,14 +89,22 @@ BaseLevel.prototype.render = function(renderer, camera){
 			break;
 		}
 	}
+
+
 	for (var i = 0; i < this.renderObjects.length; i++){
 		this.renderObjects[i].render();
 	}
-	this.avatarControll.render(this, camera);
+
+
+	if (this.avatarControll){
+		this.avatarControll.render(this, camera);
+	}
+
 	renderer.render(this.scene, camera);
+
 }
 
-BaseLevel.prototype.onRender = function(){
+BaseLevel.prototype.onRender = function(camera){
 
 }
 

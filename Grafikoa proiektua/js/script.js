@@ -42,17 +42,10 @@
 
 				window.addEventListener("keydown", onKeyDown, false);
 				window.addEventListener("keyup", onKeyUp, false);
-
-				
-
-				//showLoading();
-				
 				stats = new Stats();
 				stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 				document.body.appendChild( stats.dom );
 				stats.dom.style.display = 'block'
-				
-				requestAnimationFrame(render);
 			}
 
 			function nextLevel(){
@@ -70,10 +63,11 @@
 			}
 
 			function onGameLoaded() {
-				levels = [new Level1(), new Level2()];
+				levels = [new LevelCreditos(), new Level1(), new Level2()];
 				document.getElementById('loading').style.display = 'none'
-				currentLevel = 0;
+				currentLevel = 1;
 				levels[currentLevel].init();
+				requestAnimationFrame(render);
 			}
 
 			/**
@@ -81,17 +75,13 @@
 			 * El intervalo viene dado por requestAnimationFrame
 			 **/
 			function render() {
-				// render utilizando requestAnimationFrame
-				//moveCamaraAndPersonaje();
 				stats.begin();
-
-				onRenderLoader();
 				if (currentLevel > -1 && levels[currentLevel].ready){
-					levels[currentLevel].render(renderer, camera)
+					levels[currentLevel].render(renderer, camera);
 				}
 				stats.end();
-
 				requestAnimationFrame(render);
+				
 			}
 
 

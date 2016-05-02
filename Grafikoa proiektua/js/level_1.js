@@ -93,12 +93,14 @@ Level1.prototype.onInit = function(){
 		for (var i=0; i<numberOftrees; i++){
 			var z = 1000/numberOftrees * i;
 
+			
 			// Arboles de la derecha
 			var model = getObject('tree');
 			model.position.x = 120 + Math.random() * 300;
 			model.position.z = z + Math.random()*20;
 			model.position.y = model.scale.y / 2;
 			this.scene.add(model);
+
 
 			// Bush izquierda
 			var model = getObject('bush');
@@ -122,7 +124,6 @@ Level1.prototype.onInit = function(){
 			this.scene.add(model);
 	}
 	
-
 	// Side wals
 	var wall = new THREE.Mesh(new THREE.BoxGeometry(10, 600, 10000), getMaterial('invisible'), 0);
 	wall.position.z = 0;
@@ -141,8 +142,6 @@ Level1.prototype.onInit = function(){
 	wall.position.y = 300;
 	wall.position.x = 0;
 	this.addSolidObject(wall);
-
-	
 
 }
 

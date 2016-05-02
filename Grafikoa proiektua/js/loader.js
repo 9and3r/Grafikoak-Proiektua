@@ -32,8 +32,12 @@ var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3, 'uncharted': 4};
 var sounds = [];
 var loadedSounds = 0;
 
+// Objects
 var objects = [];
 var objectsNames = {'tree': 0, 'bush': 1};
+
+// Font
+var font;
 
 function getObject(name){
 	return objects[objectsNames[name]].clone();
@@ -68,10 +72,12 @@ function loadAll(){
 	for(i=0; i<soundsPath.length; i++){
 		loadSound(soundsPath[i], i);
 	}
+	var fontLoader = new THREE.FontLoader();
+	fontLoader.load('libs/besteak/font.js', onFontLoaded);
 }
 
 function checkLoaded(){
-	if (loadedTextures == texturesPaths.length && loadedModels == modelsPaths.length && loadedSounds == soundsPath.length){
+	if (loadedTextures == texturesPaths.length && loadedModels == modelsPaths.length && loadedSounds == soundsPath.length && font){
 		createBaseObjects();
 		// Todo esta cargado. Empezar el juego!
 		onGameLoaded();
@@ -80,6 +86,11 @@ function checkLoaded(){
 
 function loadModel(src, i){
 	modelLoader.load('recursos/' + src, onModelLoaded.bind(null, i));
+}
+
+function onFontLoaded(loadedFont){
+	font = loadedFont;
+	checkLoaded();
 }
 
 function onModelLoaded(i, geometry, materials){
