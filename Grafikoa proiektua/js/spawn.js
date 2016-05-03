@@ -51,7 +51,7 @@ Spawn.prototype.setPosition = function(x, y, z){
 }
 
 Spawn.radious = 15;
-Spawn.maxY = 350;
+Spawn.maxY = 400;
 Spawn.colorChange = 0.01;
 Spawn.speed = 0.5;
 Spawn.nearMax = 5;

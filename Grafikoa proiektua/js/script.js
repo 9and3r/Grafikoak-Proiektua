@@ -63,9 +63,9 @@
 			}
 
 			function onGameLoaded() {
-				levels = [new LevelCreditos(), new Level1(), new Level2()];
+				levels = [new LevelCreditos(), new Level1(), new Level2(), new Level3(), new Level4()];
 				document.getElementById('loading').style.display = 'none'
-				currentLevel = 1;
+				currentLevel = 4;
 				levels[currentLevel].init();
 				requestAnimationFrame(render);
 			}

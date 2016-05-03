@@ -7,7 +7,7 @@ MobilePlatform = function(object, startPos, distance, direction, speed, waitTime
 	this.moved = 0;
 	this.speed = speed;
 	this.moving = true;
-	this.waitTime = waitTime; 
+	this.waitTime = waitTime;
 }
 
 MobilePlatform.prototype.move = function(avatar){
@@ -44,11 +44,10 @@ MobilePlatform.prototype.move = function(avatar){
 				}
 				return true;
 			}
-		}else{
-			if (avatar.floor && avatar.floor == this.object){
-				vector.setComponent(this.direction, moveTo);
-				avatar.tryMoveAvatar(vector, this.speed, true);
-			}
+		}
+		if (avatar.floor && avatar.floor == this.object){
+			vector.setComponent(this.direction, moveTo);
+			avatar.tryMoveAvatar(vector, this.speed, true);
 		}
 	}
 	return false;

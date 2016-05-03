@@ -10,15 +10,14 @@ BaseLevel = function(number, name, music){
 	this.sceneMusic = music;
 }
 
+BaseLevel.dieY = -60;
+
 BaseLevel.prototype.init = function(){
 	
 	this.initScene();
 	this.initAvatarAndSpawn();
 	this.initMusic();
 	this.onInit();
-
-	var axisHelper = new THREE.AxisHelper(300);
-	this.scene.add( axisHelper );
 
 	this.ready = true;
 	this.playing = true;
@@ -38,8 +37,8 @@ BaseLevel.prototype.initAvatarAndSpawn = function(){
 	this.avatarControll.avatar.position.y = 150;
 	this.scene.add(this.avatarControll.avatar);
 
-	var spawn = new Spawn(this, this.scene, false, false);
-	this.addRenderObject(spawn);
+	this.startSpawn = new Spawn(this, this.scene, false, false);
+	this.addRenderObject(this.startSpawn);
 
 	getSound('warp').play();
 }
@@ -70,32 +69,22 @@ BaseLevel.prototype.onFinish = function(){
 
 
 BaseLevel.prototype.render = function(renderer, camera){
-
-
-
-
 	this.onRender(camera);
-
-	if(this.avatarControll){
-		this.avatarControll.moveCameraAndAvatar(this.playing, camera);
-
-		if (this.avatarControll.avatar.position.y < -100 && this.playing){
-			this.die(true);
-		}
-	}
 	for (var i = 0; i < this.movingObjects.length; i++){
 		if (this.movingObjects[i].move(this.avatarControll)){
-			this.die(false);
+			this.die();
 			break;
 		}
 	}
-
-
 	for (var i = 0; i < this.renderObjects.length; i++){
 		this.renderObjects[i].render();
 	}
-
-
+	if(this.avatarControll){
+		this.avatarControll.moveCameraAndAvatar(this.playing, camera);
+		if (this.avatarControll.avatar.position.y < BaseLevel.dieY && this.playing){
+			this.die();
+		}
+	}
 	if (this.avatarControll){
 		this.avatarControll.render(this, camera);
 	}
@@ -120,16 +109,13 @@ BaseLevel.prototype.onKeyUp = function(e){
 	}
 }
 
-BaseLevel.prototype.die = function(showDie){
+BaseLevel.prototype.die = function(){
 	if (this.playing){
 		this.playing = false;
+		this.avatarControll.died = true;
 		this.finish();
 		getSound('die').play();
-		if (showDie){
-			this.showDie();
-		}else{
-			window.setTimeout(this.init.bind(this), 7000);
-		}
+		this.showDie();
 	}
 }
 
@@ -149,6 +135,5 @@ BaseLevel.prototype.addMovingObject = function(object){
 }
 
 BaseLevel.prototype.addRenderObject = function(object){
-	//this.scene.add(object)
 	this.renderObjects.push(object);
 }

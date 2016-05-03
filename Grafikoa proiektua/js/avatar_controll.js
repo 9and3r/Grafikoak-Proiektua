@@ -9,6 +9,7 @@ AvatarControll = function(avatar){
 	this.avatarCenterPos = new THREE.Vector3();
 	this.raycaster = new THREE.Raycaster();
 	this.solidObjects = [];
+	this.died = false;
 
 	this.boundingBox = new THREE.BoundingBoxHelper(avatar);
 	this.boundingBox.update();
@@ -30,7 +31,7 @@ AvatarControll = function(avatar){
 
 AvatarControll.speed = 2;
 AvatarControll.gravity = 0.4;
-AvatarControll.minGravity = -1;
+AvatarControll.minGravity = -2.5;
 AvatarControll.upAnimationSpeed = 0.7;
 AvatarControll.upAnimationRotationSpeed = 0.03;
 AvatarControll.cameraSpeed = 3;
@@ -47,28 +48,31 @@ AvatarControll.prototype.moveCameraAndAvatar = function(canmove, camera){
 	this.avatarCenterPos.z = this.avatar.position.z;
 
 
+	if (!this.died){
+		camera.position.copy(this.avatar.position);
+		camera.rotation.y = this.angle;
+		camera.rotation.x = 0;
+		camera.rotation.z = 0;
 
-	camera.position.copy(this.avatar.position);
-	camera.rotation.y = this.angle;
-	camera.rotation.x = 0;
-	camera.rotation.z = 0;
+		if (this.targetCameraY - this.currentCameraY > AvatarControll.cameraSpeed){
+			this.currentCameraY += AvatarControll.cameraSpeed;
+		}else if (this.currentCameraY - this.targetCameraY > AvatarControll.cameraSpeed){
+			this.currentCameraY -= AvatarControll.cameraSpeed;
+		}
+		if (this.targetCameraZ - this.currentCameraZ > AvatarControll.cameraSpeed){
+			this.currentCameraZ += AvatarControll.cameraSpeed;
+		}else if (this.currentCameraZ - this.targetCameraZ > AvatarControll.cameraSpeed){
+			this.currentCameraZ -= AvatarControll.cameraSpeed;
+		}
 
 
-	if (this.targetCameraY - this.currentCameraY > AvatarControll.cameraSpeed){
-		this.currentCameraY += AvatarControll.cameraSpeed;
-	}else if (this.currentCameraY - this.targetCameraY > AvatarControll.cameraSpeed){
-		this.currentCameraY -= AvatarControll.cameraSpeed;
+		camera.translateY(this.currentCameraY);
+		camera.translateZ(this.currentCameraZ);
+		camera.lookAt(this.avatarCenterPos);
+	}else{
+		camera.lookAt(this.avatarCenterPos);
 	}
-	if (this.targetCameraZ - this.currentCameraZ > AvatarControll.cameraSpeed){
-		this.currentCameraZ += AvatarControll.cameraSpeed;
-	}else if (this.currentCameraZ - this.targetCameraZ > AvatarControll.cameraSpeed){
-		this.currentCameraZ -= AvatarControll.cameraSpeed;
-	}
-
-
-	camera.translateY(this.currentCameraY);
-	camera.translateZ(this.currentCameraZ);
-	camera.lookAt(this.avatarCenterPos);
+	
 	this.calculateScale();
 }
 
