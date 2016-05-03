@@ -1,5 +1,5 @@
 function Level4(){
-	BaseLevel.call(this, 1, 'Level 1', getSound('uncharted-sink'));
+	BaseLevel.call(this, 1, 'Level 1', getSound('uncharted-4'));
 }
 
 Level4.prototype = Object.create(BaseLevel.prototype);

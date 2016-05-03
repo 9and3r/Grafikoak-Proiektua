@@ -31,8 +31,8 @@ var models = [];
 var loadedModels = 0;
 
 // Musica
-var soundsPath = ['pyramid.mp3', 'die.mp3', 'warp.mp3', 'finish.mp3', 'uncharted.mp3', 'uncharted-sink.mp3'];
-var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3, 'uncharted': 4, 'uncharted-sink': 5};
+var soundsPath = ['pyramid.mp3', 'die.mp3', 'warp.mp3', 'finish.mp3', 'uncharted.mp3', 'uncharted-sink.mp3', 'uncharted-4.mp3'];
+var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3, 'uncharted': 4, 'uncharted-sink': 5, 'uncharted-4': 6};
 var sounds = [];
 var loadedSounds = 0;
 
