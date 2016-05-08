@@ -15,6 +15,7 @@ BaseLevel.dieY = -60;
 BaseLevel.prototype.init = function(){
 	
 	this.initScene();
+	this.showLevelNumber();
 	this.initAvatarAndSpawn();
 	this.initMusic();
 	this.onInit();
@@ -25,11 +26,15 @@ BaseLevel.prototype.init = function(){
 
 BaseLevel.prototype.initScene = function(){
 	this.scene = new THREE.Scene({ antialias: true });
+}
+
+BaseLevel.prototype.showLevelNumber = function(){
 	document.getElementById('game-over').style.display = 'none'
-	document.getElementById('level-text').style.display = 'block'
+	document.getElementById('level-div').style.display = 'block'
+	document.getElementById('level-text').innerHTML = this.name;
 	window.setTimeout(function(){
-		document.getElementById('level-text').style.display = 'none'
-	}, 100);
+		document.getElementById('level-div').style.display = 'none'
+	}, 2500);
 }
 
 BaseLevel.prototype.initAvatarAndSpawn = function(){

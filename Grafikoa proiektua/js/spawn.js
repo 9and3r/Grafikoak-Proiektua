@@ -14,7 +14,7 @@ Spawn = function(level, scene, active, directionUp){
 	this.particleCount = 3800;
 
     this.particles = new THREE.Geometry();
-    this.particleMaterial = new THREE.ParticleBasicMaterial({size: 1});
+    this.particleMaterial = new THREE.PointsMaterial({size: 1});
 
 
  	this.currentColor = [Math.random(), Math.random(), Math.random()];

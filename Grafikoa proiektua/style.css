@@ -37,6 +37,13 @@ div{
   	transform: translate(-50%, -50%);
 }
 
+.centerH{
+	position: absolute;
+  	left: 50%;
+  	webkit-transform: translate(-50%, 0);
+  	transform: translate(-50%, 0);
+}
+
 h1{
 	font-family: arial;
 	font-size: 3em;
@@ -49,9 +56,27 @@ h1{
 }
 
 #level-text{
-	padding-left: 4em;
-	padding-right: 4em;
-	padding-bottom: 2em;
-	padding-top: 2em;
-	background-image: url(./recursos/imagenes/rock/rock_COLOR.png);
+	margin-top: 4em;
+	padding-left: 2em;
+	padding-right: 2em;
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+	color: #FFFFFF;
+	background-color: #000066;
+	border-radius: 25px;
+	border: 2px solid #B2B2FF;
+}
+
+#loading{
+	background-color: #000000;
+	color: #FFFFFF;
+}
+
+#finish{
+	background-color: #000000;
+	color: #FFFFFF;
+}
+
+.center-text{
+	text-align: center;
 }

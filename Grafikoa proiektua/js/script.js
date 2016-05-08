@@ -5,7 +5,6 @@
 			var solidObjects = [];
 			var currentLevel;
 			var stats;
-			var camControls;
 			var clock;
 
 			var levels;
@@ -44,29 +43,43 @@
 				window.addEventListener("keyup", onKeyUp, false);
 				stats = new Stats();
 				stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-				document.body.appendChild( stats.dom );
+				//document.body.appendChild(stats.dom);
 				stats.dom.style.display = 'block'
 			}
 
 			function nextLevel(){
-				levels[currentLevel].finish();
-				currentLevel ++;
+				if (currentLevel+1 < levels.length){
+					changeLevel(currentLevel+1);
+				}else{
+					document.getElementById('finish').style.display = 'block';
+				}
+			}
+
+			function changeLevel(level){
+				if (currentLevel >= 0){
+					levels[currentLevel].finish();
+				}
+				currentLevel = level;
+				document.getElementById('finish').style.display = 'none'
 				levels[currentLevel].init();
 			}
 
 			function onKeyDown(e){
-				levels[currentLevel].onKeyDown(e);
+				if (currentLevel > -1){
+					levels[currentLevel].onKeyDown(e);
+				}
 			}
 
 			function onKeyUp(e){
-				levels[currentLevel].onKeyUp(e);
+				if (currentLevel > -1){
+					levels[currentLevel].onKeyUp(e);
+				}
 			}
 
 			function onGameLoaded() {
-				levels = [new LevelCreditos(), new Level1(), new Level2(), new Level3(), new Level4()];
+				levels = [new Level1(), new Level2(), new Level3(), new Level4()];
 				document.getElementById('loading').style.display = 'none'
-				currentLevel = 4;
-				levels[currentLevel].init();
+				changeLevel(0);
 				requestAnimationFrame(render);
 			}
 

@@ -1,5 +1,5 @@
 function Level2(){
-	BaseLevel.call(this, 1, 'Level 1', getSound('pyramid'));
+	BaseLevel.call(this, 2, 'Nivel 2', getSound('pyramid'));
 }
 
 Level2.prototype = Object.create(BaseLevel.prototype);
@@ -7,9 +7,15 @@ Level2.prototype.constructor = Level2;
 
 Level2.prototype.onInit = function(){
 
-	// Ambient light
-	var light = new THREE.AmbientLight( 0xAAAAAA ); // soft white light
+	// Ambient light. Poca luz
+	var light = new THREE.AmbientLight( 0x0F0F0F );
 	this.scene.add(light);
+
+
+	// Luz que sigue al personaje
+	this.light = new THREE.PointLight( 0x4f4f4f, 3, 200 );
+	this.light.position.y = 100;
+	this.scene.add(this.light);
 
 	// Invisible wall
 	var wall = new THREE.Mesh(new THREE.BoxGeometry(200, 400, 10), getMaterial('invisible'), 0);
@@ -72,9 +78,8 @@ Level2.prototype.onInit = function(){
 }
 
 Level2.prototype.onRender = function(){
-	if (this.avatarControll.avatar.position.z > 600){
-		//this.avatarControll.targetAngle = Math.PI * 3 / 2;
-	}
+	// Mover la luz con el personaje
+	this.light.position.z = this.avatarControll.avatar.position.z;
 }
 
 

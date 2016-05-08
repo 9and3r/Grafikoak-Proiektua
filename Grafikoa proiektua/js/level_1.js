@@ -1,5 +1,5 @@
 function Level1(){
-	BaseLevel.call(this, 1, 'Level 1', getSound('uncharted'));
+	BaseLevel.call(this, 1, 'Nivel 1', getSound('uncharted'));
 }
 
 Level1.prototype = Object.create(BaseLevel.prototype);
@@ -7,9 +7,11 @@ Level1.prototype.constructor = Level1;
 
 Level1.prototype.onInit = function(){
 
+	// Cielo
 	var geometry = new THREE.SphereGeometry(3000, 10, 10);
-	var sky = new THREE.Mesh(geometry, getMaterial('proba'));
+	var sky = new THREE.Mesh(geometry, getMaterial('sky'));
 	this.scene.add(sky);
+	// Poner la textura por dentro de la geometria
 	sky.material.side = THREE.BackSide;
 
 	// Ambient light
@@ -27,6 +29,7 @@ Level1.prototype.onInit = function(){
 	floor.position.y = -100;
 	floor.position.z = 4900;
 	floor.position.x = -2600;
+	floor.material.map.repeat.set(50, 50);
 	this.addSolidObject(floor);
 
 	// Grass 2
@@ -40,6 +43,7 @@ Level1.prototype.onInit = function(){
 	var floor = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 600), getMaterial('tierra'), 0);
 	floor.position.y = -100;
 	floor.position.z = 200;
+	floor.material.map.repeat.set(3, 7);
 	this.addSolidObject(floor);
 
 	// Mobile platform
@@ -52,9 +56,8 @@ Level1.prototype.onInit = function(){
 	var floor = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 700), getMaterial('tierra'), 0);
 	floor.position.y = -100;
 	floor.position.z = 1050;
+	floor.material.map.repeat.set(3, 7);
 	this.addSolidObject(floor);
-
-
 
 	// Piramide izquierda
 	var wall = new THREE.Mesh(new THREE.CylinderGeometry(1, 350, 300, 3), getMaterial('rock'), 0);
@@ -79,10 +82,6 @@ Level1.prototype.onInit = function(){
 	wall.position.x = 0;
 	this.addSolidObject(wall);
 
-
-	// TODO HAU KENDU
-	//this.avatarControll.avatar.position.z = 1300;
-
 	// Finish spawn
 	var spawn = new Spawn(this, this.scene, true, true);
 	spawn.setPosition(0, 0, 1200);
@@ -91,7 +90,7 @@ Level1.prototype.onInit = function(){
 	// Trees
 		var numberOftrees = 40;
 		for (var i=0; i<numberOftrees; i++){
-			var z = 1000/numberOftrees * i;
+			var z = 950/numberOftrees * i;
 
 			
 			// Arboles de la derecha
@@ -124,7 +123,7 @@ Level1.prototype.onInit = function(){
 			this.scene.add(model);
 	}
 	
-	// Side wals
+	// Paredes invisibles para evitar que salga del camino
 	var wall = new THREE.Mesh(new THREE.BoxGeometry(10, 600, 10000), getMaterial('invisible'), 0);
 	wall.position.z = 0;
 	wall.position.y = 300;

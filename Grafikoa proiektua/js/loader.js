@@ -12,16 +12,15 @@ var texturesPaths = ['rock/rock_COLOR.png', 'rock/rock_NRM.png', 'rock/rock_OCC.
 					 'tree.png', // 6
 					 'bush.png', // 7
 					 'lava.jpg', // 8
-					 'lava/lava_COLOR.png', 'lava/lava_NRM.png', 'lava/lava_OCC.png' // 9, 10, 11
+					 'lava/lava_COLOR.png', 'lava/lava_NRM.png', 'lava/lava_OCC.png', // 9, 10, 11
 					  ]; 
 var textures = [];
-var texturesNames = {};
 var loadedTextures = 0;
 
 
 // Materiales
 var materials = [];
-var materialsNames = {'invisible': 0, 'rock': 1, 'proba': 2, 'grass': 3, 'tierra': 4, 'lava': 5, 'lava-rock': 6};
+var materialsNames = {'invisible': 0, 'rock': 1, 'sky': 2, 'grass': 3, 'tierra': 4, 'lava-1': 5, 'lava-2': 6, 'lava-3':7, 'lava-rock': 8};
 
 
 // Modelos
@@ -56,11 +55,7 @@ function getSound(name){
 }
 
 function getMaterial(name){
-	return materials[materialsNames[name]]
-}
-
-function getTexture(name){
-	return textures[texturesNames[name]]
+	return materials[materialsNames[name]].clone();
 }
 
 function loadAll(){
@@ -139,29 +134,42 @@ function createBaseObjects(){
 	materials.push(planeMaterial);
 
 	// Sky material
-	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[3], specular: 0x111111});
+	var planeMaterial = new THREE.MeshLambertMaterial({map:textures[3]});
 	materials.push(planeMaterial);
 
 	// Grass material
 	textures[4].wrapS = THREE.RepeatWrapping;
 	textures[4].wrapT = THREE.RepeatWrapping;
-	textures[4].repeat.set(50, 50);
-	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[4]});
+	var planeMaterial = new THREE.MeshLambertMaterial({map:textures[4]});
 	materials.push(planeMaterial);
 
 
 	// Material tierra
 	textures[5].wrapS = THREE.RepeatWrapping;
 	textures[5].wrapT = THREE.RepeatWrapping;
-	textures[5].repeat.set(5, 15);
-	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[5], specular: 0x111111});
+	var planeMaterial = new THREE.MeshLambertMaterial({map:textures[5]});
 	materials.push(planeMaterial);
 
 	// Material lava
 	textures[8].wrapS = THREE.RepeatWrapping;
 	textures[8].wrapT = THREE.RepeatWrapping;
-	textures[8].repeat.set(20, 20);
-	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[8], specular: 0x111111});
+	var planeMaterial = new THREE.MeshLambertMaterial({map:textures[8]});
+	materials.push(planeMaterial);
+
+	// Material lava 2
+	var textureLava2 = textures[8].clone();
+	// Despues de clonar es necesario poner la variable a true
+	// http://stackoverflow.com/a/16707284
+	textureLava2.needsUpdate = true;
+	var planeMaterial = new THREE.MeshLambertMaterial({map:textureLava2});
+	materials.push(planeMaterial);
+
+	// Material lava 3
+	var textureLava2 = textures[8].clone();
+	// Despues de clonar es necesario poner la variable a true
+	// http://stackoverflow.com/a/16707284
+	textureLava2.needsUpdate = true;
+	var planeMaterial = new THREE.MeshLambertMaterial({map:textureLava2});
 	materials.push(planeMaterial);
 
 	// Fake tree
