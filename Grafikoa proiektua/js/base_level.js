@@ -28,6 +28,7 @@ BaseLevel.prototype.initScene = function(){
 	this.scene = new THREE.Scene({ antialias: true });
 }
 
+// Ensenar el mensaje del nivel
 BaseLevel.prototype.showLevelNumber = function(){
 	document.getElementById('game-over').style.display = 'none'
 	document.getElementById('level-div').style.display = 'block'

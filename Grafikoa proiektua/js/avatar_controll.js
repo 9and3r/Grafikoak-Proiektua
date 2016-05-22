@@ -76,6 +76,7 @@ AvatarControll.prototype.moveCameraAndAvatar = function(canmove, camera){
 	this.calculateScale();
 }
 
+// Cambiar la escala si es necesario
 AvatarControll.prototype.calculateScale = function(){
 	for(var i=0; i<3; i++){
 		var scale = this.avatar.scale.getComponent(i);
@@ -179,8 +180,6 @@ AvatarControll.prototype.moveVertical = function(keyCount, rotation, canmove){
 	// Calcular la nueva velocidad vertical
 	this.calculateVerticalSpeed();
 
-
-
 	// Mover el personaje con el valor de verticalSpeed
 	if (this.verticalSpeed > 0 && canmove){
 		this.tryMoveAvatar(new THREE.Vector3(0, 1, 0), this.verticalSpeed);
@@ -200,26 +199,9 @@ AvatarControll.prototype.moveVertical = function(keyCount, rotation, canmove){
 }
 
 AvatarControll.prototype.render = function(level, camera){
-	/*
-	// http://stackoverflow.com/a/31819161
-	for (var i=0; i<this.hidden.length; i++){
-   		this.hidden[i].material.opacity = 1;
-   	}
-	var vector = new THREE.Vector3();
-	vector.set(0, 0, 1);
-	vector.unproject(camera);
-   	this.raycaster.set(camera.position, vector.sub(camera.position).normalize());
-   	this.raycaster.near = 0;
-   	this.raycaster.far = camera.position.distanceTo(this.avatarCenterPos) - 30;
-   	var intersects = this.raycaster.intersectObjects(this.solidObjects);
-   	for (i=0; i<intersects.length; i++){
-   		this.hidden.push(intersects[i].object);
-   		intersects[i].object.material.opacity = 0.5;
-   		intersects[i].object.material.trasparent = true;
-   	}
-   	*/
 }
 
+// Calcular la velocidad vertical
 AvatarControll.prototype.calculateVerticalSpeed = function(){
 	this.verticalSpeed -= AvatarControll.gravity;
 	if (this.verticalSpeed < 0 && this.verticalSpeed > AvatarControll.minGravity){
@@ -227,6 +209,7 @@ AvatarControll.prototype.calculateVerticalSpeed = function(){
 	}
 }
 
+// Calcular las posiciones que estan alrededor del personaje para usarlos en los calculos de las colisiones
 AvatarControll.prototype.getCheckPositions = function(direction){
 	var positions = [];
 	var rotation = this.avatar.rotation.y;
@@ -260,6 +243,7 @@ AvatarControll.prototype.getCheckPositions = function(direction){
 	return positions;
 }
 
+// Calcular las posiciones que estan alrededor del personaje en la altura especificada para usarlos en los calculos de las colisiones
 AvatarControll.getCheckPosition = function(y, position, distance, direction, positions){
 	if (direction.y != 0){
 		// Posicion central
@@ -267,32 +251,32 @@ AvatarControll.getCheckPosition = function(y, position, distance, direction, pos
 		currentPos.y += y;
 		positions.push(currentPos);
 	}
-	if (direction.y != 0 || direction.x > 0 || true){
-		currentPos = position.clone();
-		currentPos.y += y;
-		currentPos.x += distance;
-		positions.push(currentPos);
-	}
-	if (direction.y != 0 || direction.x < 0|| true){
-		currentPos = position.clone();
-		currentPos.y += y;
-		currentPos.x -= distance;
-		positions.push(currentPos);
-	}
-	if (direction.y != 0 || direction.z > 0|| true){
-		currentPos = position.clone();
-		currentPos.y += y;
-		currentPos.z += distance;
-		positions.push(currentPos);
-	}
-	if (direction.y != 0 || direction.z < 0|| true){
-		currentPos = position.clone();
-		currentPos.y += y;
-		currentPos.z -= distance;
-		positions.push(currentPos);
-	}
+	currentPos = position.clone();
+	currentPos.y += y;
+	currentPos.x += distance;
+	positions.push(currentPos);
+	
+
+	currentPos = position.clone();
+	currentPos.y += y;
+	currentPos.x -= distance;
+	positions.push(currentPos);
+	
+
+	currentPos = position.clone();
+	currentPos.y += y;
+	currentPos.z += distance;
+	positions.push(currentPos);
+	
+
+	currentPos = position.clone();
+	currentPos.y += y;
+	currentPos.z -= distance;
+	positions.push(currentPos);
+	
 }
 
+// Comprobar si se puede mover sin colisionar
 AvatarControll.prototype.checkIfCanMove = function(direction, distance, checkAngle){
 	if (!checkAngle){
 		worldDirection = direction.clone();
@@ -319,10 +303,8 @@ AvatarControll.prototype.checkIfCanMove = function(direction, distance, checkAng
 	return colision;
 }
 
+// Mover el personaje si es posible
 AvatarControll.prototype.tryMoveAvatar = function(direction, distance, checkAngle){
-
-	// ERROREA HEMEN
-
 	var object = this.checkIfCanMove(direction, distance, checkAngle);
 	if (!object){
 		if (checkAngle){
@@ -338,6 +320,7 @@ AvatarControll.prototype.tryMoveAvatar = function(direction, distance, checkAngl
 	return object;
 }
 
+// Rotar el personaje segun las teclas presionadas
 AvatarControll.prototype.rotateAvatar = function(keyCount, previousRotation){
 
 	if (keyCount == 1){
@@ -365,6 +348,7 @@ AvatarControll.prototype.rotateAvatar = function(keyCount, previousRotation){
 	}
 }
 
+// Cambiar la rotacion de la camara
 AvatarControll.prototype.changeRotation = function(){
 	if (Math.abs(this.targetAngle - this.angle) > AvatarControll.camaraRotationSpeed){
 		targetAngle = AvatarControll.checkAngle(this.targetAngle);

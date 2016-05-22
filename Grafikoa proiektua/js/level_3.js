@@ -222,10 +222,10 @@ Level3.prototype.onRender = function(camera){
 		this.avatarControll.targetScale.y = 0;
 	}
 
-	this.lava.material.map.offset.x -= Math.random() * 0.02;
+	this.lava.material.map.offset.x -= 0.02;
 
-	this.lavaFallMaterial.map.offset.y += Math.random() * 0.04;
-	this.lavaFallMaterial2.map.offset.y += Math.random() * 0.02;
+	this.lavaFallMaterial.map.offset.y += 0.04;
+	this.lavaFallMaterial2.map.offset.y += 0.02;
 	
 }
 

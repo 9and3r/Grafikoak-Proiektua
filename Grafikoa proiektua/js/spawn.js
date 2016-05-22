@@ -76,6 +76,7 @@ Spawn.prototype.render = function(avatar){
 	this.particles.verticesNeedUpdate = true;
 }
 
+// Cambiar el color
 Spawn.prototype.calculateColor = function(){
 	for (var i=0; i<3; i++){
 		if (this.currentColor[i] - this.targetColor[i] > Spawn.colorChange){
@@ -93,13 +94,17 @@ Spawn.prototype.calculateColor = function(){
 	this.cylinder.material.color = this.particleMaterial.color;
 }
 
+// Metodo cuando el personaje esta encima
 Spawn.prototype.onFloor = function(avatarControll){
 	if (this.active && Math.abs(avatarControll.avatar.position.x - this.cylinder.position.x) < Spawn.nearMax && Math.abs(avatarControll.avatar.position.z - this.cylinder.position.z) < Spawn.nearMax){
+		// Efecto de sonido
 		var sound = getSound('finish');
 		sound.play();
 		avatarControll.upAnimation = true;
 		avatarControll.targetCameraZ = -300;
 		avatarControll.targetCameraY = 10;
+
+		// Pasar al siguiente nivel despues de 5 segundos
 		window.setTimeout(nextLevel, 5000);
 	}
 }
