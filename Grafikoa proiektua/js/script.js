@@ -77,7 +77,7 @@
 			}
 
 			function onGameLoaded() {
-				levels = [new Level1(), new Level2(), new Level3(), new Level4()];
+				levels = [new Level5(), new Level1(), new Level2(), new Level3(), new Level4()];
 				document.getElementById('loading').style.display = 'none'
 				changeLevel(0);
 				requestAnimationFrame(render);

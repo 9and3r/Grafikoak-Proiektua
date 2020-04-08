@@ -56,6 +56,8 @@ Level4.prototype.onInit = function(){
 	var spawn = new Spawn(this, this.scene, true, true);
 	spawn.setPosition(0, 350, cylinder.position.z);
 	this.addRenderObject(spawn);
+
+
 }
 
 
