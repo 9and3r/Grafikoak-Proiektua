@@ -11,15 +11,14 @@ AvatarControll = function(avatar){
 	this.solidObjects = [];
 	this.died = false;
 
-	this.boundingBox = new THREE.BoundingBoxHelper(avatar);
-	this.boundingBox.update();
+	this.boundingBox = new THREE.Box3();
 	this.hidden = [];
 
 	this.avatar.scale.x = 0;
 	this.avatar.scale.y = 0;
 	this.avatar.scale.z = 1;
 
-	this.targetScale = new THREE.Vector3(1, 1, 1);
+	this.targetScale = new THREE.Vector3(50, 50, 50);
 
 	this.upAnimation = false;
 
@@ -36,7 +35,7 @@ AvatarControll.upAnimationSpeed = 0.7;
 AvatarControll.upAnimationRotationSpeed = 0.03;
 AvatarControll.cameraSpeed = 3;
 AvatarControll.camaraRotationSpeed = 0.03;
-AvatarControll.scaleSpeed = 0.03;
+AvatarControll.scaleSpeed = 1;
 
 var first = true;
 
@@ -214,9 +213,11 @@ AvatarControll.prototype.getCheckPositions = function(direction){
 	var positions = [];
 	var rotation = this.avatar.rotation.y;
 	this.avatar.rotation.y = 0;
-	this.boundingBox.update();
-	var max = this.boundingBox.box.max.sub(this.avatar.position);
-	var min = this.boundingBox.box.min.sub(this.avatar.position);
+	console.log("HOLA");
+	console.log(this.boundingBox.setFromObject(this.avatar));
+	//this.boundingBox.update();
+	var max = this.boundingBox.max.sub(this.avatar.position);
+	var min = this.boundingBox.min.sub(this.avatar.position);
 	var distance;
 	if (max.x - min.x > max.z - min.z){
 		distance = max.z - min.z;

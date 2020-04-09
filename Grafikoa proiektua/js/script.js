@@ -25,7 +25,7 @@
 		     	// Inicializamos el color del fondo y el tamano
 				
 				renderer.setSize(window.innerWidth, window.innerHeight);
-				renderer.shadowMapEnabled = true;
+				renderer.shadowMap.enabled = true;
 
 				raycaster = new THREE.Raycaster();
 
@@ -43,7 +43,6 @@
 				window.addEventListener("keyup", onKeyUp, false);
 				stats = new Stats();
 				stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-				console.log(stats.dom);
 				document.body.appendChild(stats.dom);
 				stats.dom.style.display = 'block'
 			}

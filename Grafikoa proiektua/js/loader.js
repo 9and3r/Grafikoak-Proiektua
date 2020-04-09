@@ -24,7 +24,7 @@ var materialsNames = {'invisible': 0, 'rock': 1, 'sky': 2, 'grass': 3, 'tierra':
 
 
 // Modelos
-var modelsPaths = ['Drake/drake.json'];
+var modelsPaths = ['Shrek/Shrek.glb'];
 var modelNames = {'nathan':0}
 var models = [];
 var loadedModels = 0;
@@ -60,7 +60,7 @@ function getMaterial(name){
 
 function loadAll(){
 	document.getElementById('loading').style.display = 'block'
-	modelLoader = new THREE.JSONLoader();
+	modelLoader = new THREE.GLTFLoader();
 	textureLoader = new THREE.TextureLoader();
 	for (i=0; i<texturesPaths.length; i++){
 		loadTexture(texturesPaths[i], i);
@@ -92,8 +92,8 @@ function onFontLoaded(loadedFont){
 	checkLoaded();
 }
 
-function onModelLoaded(i, geometry, materials){
-	models[i] = new THREE.Mesh( geometry, new THREE.MultiMaterial( materials ) );;
+function onModelLoaded(i, scene){
+	models[i] = scene.scene.children[0];
 	loadedModels++;
 	checkLoaded();
 }
