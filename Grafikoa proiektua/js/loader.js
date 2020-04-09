@@ -72,7 +72,7 @@ function loadAll(){
 		loadSound(soundsPath[i], i);
 	}
 	var fontLoader = new THREE.FontLoader();
-	fontLoader.load('libs/besteak/font.js', onFontLoaded);
+	fontLoader.load('/js/lib/font.js', onFontLoaded);
 }
 
 function checkLoaded(){
