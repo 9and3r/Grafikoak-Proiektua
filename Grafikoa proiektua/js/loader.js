@@ -13,6 +13,7 @@ var texturesPaths = ['rock/rock_COLOR.png', 'rock/rock_NRM.png', 'rock/rock_OCC.
 					 'bush.png', // 7
 					 'lava.jpg', // 8
 					 'lava/lava_COLOR.png', 'lava/lava_NRM.png', 'lava/lava_OCC.png', // 9, 10, 11
+					 'slapchop/slapchop.png', // 12
 					  ]; 
 var textures = [];
 var loadedTextures = 0;
@@ -20,18 +21,18 @@ var loadedTextures = 0;
 
 // Materiales
 var materials = [];
-var materialsNames = {'invisible': 0, 'rock': 1, 'sky': 2, 'grass': 3, 'tierra': 4, 'lava-1': 5, 'lava-2': 6, 'lava-3':7, 'lava-rock': 8};
+var materialsNames = {'invisible': 0, 'rock': 1, 'sky': 2, 'grass': 3, 'tierra': 4, 'lava-1': 5, 'lava-2': 6, 'lava-3':7, 'lava-rock': 8, 'slapchop': 9};
 
 
 // Modelos
-var modelsPaths = ['Shrek/Shrek.glb'];
-var modelNames = {'nathan':0}
+var modelsPaths = ['Shrek/Shrek.glb', 'harry/scene.gltf'];
+var modelNames = {'nathan':0, 'harry': 1}
 var models = [];
 var loadedModels = 0;
 
 // Musica
-var soundsPath = ['pyramid.mp3', 'die.mp3', 'warp.mp3', 'finish.mp3', 'uncharted.mp3', 'uncharted-sink.mp3', 'uncharted-4.mp3'];
-var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3, 'uncharted': 4, 'uncharted-sink': 5, 'uncharted-4': 6};
+var soundsPath = ['pyramid.mp3', 'die.mp3', 'warp.mp3', 'finish.mp3', 'uncharted.mp3', 'uncharted-sink.mp3', 'uncharted-4.mp3', 'shrek_menu.mp3'];
+var soundNames = {'pyramid':0, 'die':1, 'warp':2, 'finish': 3, 'uncharted': 4, 'uncharted-sink': 5, 'uncharted-4': 6, 'shrek-1': 7};
 var sounds = [];
 var loadedSounds = 0;
 
@@ -189,6 +190,10 @@ function createBaseObjects(){
 	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[9], specular: 0x111111});
 	planeMaterial.normalMap = textures[10];
 	planeMaterial.bumpMap = textures[11];
+	materials.push(planeMaterial);
+
+	// Rock material
+	var planeMaterial = new THREE.MeshPhongMaterial({map:textures[12]});
 	materials.push(planeMaterial);
 }
 

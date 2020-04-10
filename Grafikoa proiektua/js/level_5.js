@@ -1,5 +1,5 @@
 function Level5(){
-	BaseLevel.call(this, 5, 'Nivel 5', getSound('uncharted-4'));
+	BaseLevel.call(this, 5, 'Nivel 5', getSound('shrek-1'));
 }
 
 Level5.prototype = Object.create(BaseLevel.prototype);
@@ -8,8 +8,15 @@ Level5.prototype.constructor = Level4;
 Level5.prototype.onInit = function(){
 
 	// Ambient light
-	var light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
+	var light = new THREE.AmbientLight( 0xFFFFFF); // soft white light
 	this.scene.add(light);
+
+	var harry = getModel('nathan');
+	harry.scale.setComponent(0, 20);
+	harry.scale.setComponent(1, 20);
+	harry.scale.setComponent(2, 20);
+	console.log(harry);
+	this.scene.add(harry);
 
 	// Cielo
 	var geometry = new THREE.SphereGeometry(3000, 10, 10);
@@ -45,29 +52,12 @@ Level5.prototype.onInit = function(){
 	spawn.setPosition(0, 350, 1000);
 	this.addRenderObject(spawn);
 
-	// Slap chop base
-	var geometry = new THREE.CylinderGeometry(100, 120, 160, 32);
-	var cylinder = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color: 'white'}));
-	cylinder.position.z = 600;
-	cylinder.position.y = 100;
-	this.addSolidObject(cylinder);
 
-	var geometry2 = new THREE.CylinderGeometry(60, 100, 60, 32);
-	var cylinder2 = new THREE.Mesh(geometry2, new THREE.MeshPhongMaterial({color: 'black'}));
-	cylinder2.position.z = cylinder.position.z;
-	cylinder2.position.y = cylinder.position.y + (geometry.parameters.height/2) + (geometry2.parameters.height/2);
-	this.addSolidObject(cylinder2);
+	var slap = new SlapChop(this, 0, 170, 1000);
 
-	var geometry3 = new THREE.CylinderGeometry(10, 60, 60, 32);
-	var cylinder3 = new THREE.Mesh(geometry3, new THREE.MeshPhongMaterial({color: 'black'}));
-	cylinder3.position.z = cylinder.position.z;
-	cylinder3.position.y = cylinder2.position.y + (geometry2.parameters.height/2) + (geometry3.parameters.height/2) + 10;
-	this.addSolidObject(cylinder2);
+
+
+	//cylinder3.position.z = cylinder.position.z;
+	//cylinder3.position.y = cylinder2.position.y + (geometry2.parameters.height/2) + (geometry3.parameters.height/2) + 10;
 }
 
-
-Level5.prototype.onRender = function(camera){
-	if (this.avatarControll.avatar.position.y < BaseLevel.dieY){
-		this.avatarControll.targetScale.y = 0;
-	}
-}

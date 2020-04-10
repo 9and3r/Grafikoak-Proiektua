@@ -24,7 +24,7 @@ AvatarControll = function(avatar){
 
 	this.currentCameraZ = -80;
 	this.currentCameraY = 60;
-	this.targetCameraZ = -130;
+	this.targetCameraZ = -200;
 	this.targetCameraY = 60;
 }
 
@@ -213,9 +213,7 @@ AvatarControll.prototype.getCheckPositions = function(direction){
 	var positions = [];
 	var rotation = this.avatar.rotation.y;
 	this.avatar.rotation.y = 0;
-	console.log("HOLA");
-	console.log(this.boundingBox.setFromObject(this.avatar));
-	//this.boundingBox.update();
+	this.boundingBox.setFromObject(this.avatar)
 	var max = this.boundingBox.max.sub(this.avatar.position);
 	var min = this.boundingBox.min.sub(this.avatar.position);
 	var distance;
